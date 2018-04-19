@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+{% block title %}
+Formulario
+{% endblock %} 
+{% block content %}
+<p>Titulo: {{object.title}}</p>
+<p>Cuerpo: {{object.body}}</p>
+<p>Leyes aplicables: {{object.applicableLaws}}</p>
+<p>Fecha de redaccion: {{object.registrationDate}}</p>
+<p>Modo borrador: {{object.draftMode|yesno:"Si,No" }}</p>
+<a href="{% url 'AcmeExplorer:legalTextUpdate' object.pk %}"><button type="button">Editar</button></a>
+<form action="{% url 'AcmeExplorer:legalTextDelete' object.pk %}" method="post" onsubmit="askSubmission('¿Esta seguro?', self)">
+	{% csrf_token %}
+	<button type="submit">Borrar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,9 @@
+Para el login una vez terminado, y para los forms de crear y otros POST usar redirect para redirigir, lo unico que hace 
+falta es 'aplicacion:vista'
+
+Para cuando se quiera redirigir a una vista con parametros seria util usar reverse, poniendo primero 'app:vista' donde se quiere mandar
+y despues los argumentos si fueran necesarios, ej: ('AcmeExplorer:displayRanger', args='ranger.id')
+
+generic.ListView para listas y generic.DetailView para display, para el ultimo el id se pasa con pk
+
+StackedInline sirve para crear objetos dentro de otros, especificando el model y con extra cuantos, con TabularInline es mas compacto

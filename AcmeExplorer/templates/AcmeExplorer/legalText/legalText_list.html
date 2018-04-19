@@ -1,0 +1,30 @@
+{% extends 'base.html' %} 
+{% block title %} Formulario {% endblock %} 
+{% block content %}
+<table class="displaytag">
+
+	<thead>
+		<th class="sortable"></th>
+		{% for field in fields %}
+		<th class="sortable"><a>{{ field }}</a></th> 
+		{% endfor %}
+	</thead>
+	{% for legalText in object_list %}
+	{% if forloop.counter|divisibleby:2 %}
+	<tr class="even">
+	{% else %}
+	<tr class="odd">
+	{% endif %}
+		<td><a href="{% url 'AcmeExplorer:legalTextDisplay' legalText.id %}">Mostrar</a></td>
+		<td>{{ legalText.title }}</td>
+		<td>{{ legalText.body }}</td>
+		<td>{{ legalText.applicableLaws }}</td>
+		<td>{{ legalText.registrationDate }}</td>
+		<td>{{ legalText.draftMode|yesno:"Si,No" }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<a href="{% url 'AcmeExplorer:legalTextCreate' %}">Crear texto legal</a>
+<br><br>
+{% endblock %}
