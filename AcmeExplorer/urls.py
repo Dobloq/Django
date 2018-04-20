@@ -15,17 +15,21 @@ Including another URLconf
 """
 from django.urls import path
 from django.contrib.auth.views import login, logout
-from AcmeExplorer.views import home, LegalTextCreate, LegalTextUpdate, LegalTextList, LegalTextDisplay, LegalTextDelete
+from AcmeExplorer.views import home, LegalTextCreate, LegalTextUpdate, LegalTextList, LegalTextDisplay, LegalTextDelete, ExplorerCreate, RangerCreate, AdminCreate, Logout, Login
 
 app_name = "AcmeExplorer"
 urlpatterns = [
     path('', home, name="home"),
-    path('accounts/logout', logout, name="logout"),
-    path('accounts/login', login, name="login"),
+    path('logout/', Logout.as_view(), name="logout"),
+    path('login/', Login.as_view(), name="login"),
 #     path('ranger/nonauth/create', createRanger, name="createRanger"),
     path('legalText/create/', LegalTextCreate.as_view(), name="legalTextCreate"),
     path('legalText/<int:pk>/edit/', LegalTextUpdate.as_view(), name="legalTextUpdate"),
     path('legalText/<int:pk>/delete/', LegalTextDelete.as_view(), name="legalTextDelete"),
     path('legalText/<int:pk>/', LegalTextDisplay.as_view(), name="legalTextDisplay"),
     path('legalText/', LegalTextList.as_view(), name="legalTextList"),
+    #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
+    path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),
+    path('explorer/create/', ExplorerCreate.as_view(), name="explorerCreate"),
+    path('admin/create/', AdminCreate.as_view(), name="adminCreate"),
 ]

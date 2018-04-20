@@ -5,7 +5,7 @@
 <div>
 	<ul id="jMenu">
 		<!-- 		Si esta autentificado -->
-		<li><a class="fNiv">Perfil ({{nombre}})</a>
+		<li><a class="fNiv">Perfil ({{request.user.first_name}})</a>
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="{{rol}}/edit">Editar perfil</a></li>

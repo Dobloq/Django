@@ -1,5 +1,5 @@
 <html lang="en-us">
-{% load %}
+{% load %} {% load i18n %} {% load cache %}
 <head>
 <title>Log in</title>
 <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
@@ -10,8 +10,7 @@
 
 
 
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css"
 	href="/static/admin/css/responsive.css" />
 </head>
@@ -56,22 +55,26 @@
 
 
 
-				<form action="/AcmeExplorer/accounts/login" method="post">
+				<form action="/AcmeExplorer/login/" method="post" id="login-form">
 					{% csrf_token %}
 					<div class="form-row">
 
-						<label class="required">Username:</label> 
-						<input type="text" name="username" autofocus maxlength="254" required id="username" />
+						<label class="required" for="id_username">{% trans 'username'|capfirst %}:</label> <input type="text" name="username"
+							autofocus maxlength="254" required id="id_username">
 					</div>
+
 					<div class="form-row">
 
-						<label class="required">Password:</label> 
-						<input type="password" name="password" required id="password" />
+						<label class="required" for="id_password">{% trans "Password" %}:</label> <input type="password" name="password" required
+							id="id_password"> <input type="hidden" name="next"
+							value="/admin/">
 					</div>
-					<input type="hidden" name="next" value="/AcmeExplorer"/> 
+
+					<input type="hidden" name="next" value="/AcmeExplorer" />
 
 					<div class="submit-row">
-						<label>&nbsp;</label><input type="submit" value="Log in" />
+						<label>&nbsp;</label><input type="submit"
+							value="{% trans 'Log in' %}" />
 					</div>
 				</form>
 

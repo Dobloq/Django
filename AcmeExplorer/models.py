@@ -1,10 +1,32 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import UserManager, BaseUserManager, User
+from django.contrib.auth.hashers import make_password
 
 
 # Create your models here.
-class Actor(User):
-    pass
+class Actor(User, UserManager, BaseUserManager):
+    phoneNumber = models.CharField(max_length=15, blank=True)
+    address = models.CharField(max_length=40, blank=True)
+    
+    def create_user(self, username, email, password, phoneNumber=None, address=None, first_name=None, last_name=None, **extra_fields):
+        actor = self.model(username=username, email=email, phoneNumber=phoneNumber, address=address, first_name=first_name, last_name=last_name, **extra_fields)
+        passwo = make_password(password)
+        print(passwo)
+        actor.set_password(password)
+        actor.save()
+        return actor
+    
+    def superusuario(self, username, email, password, phoneNumber=None, address=None, first_name=None, last_name=None):
+        return Actor.create_user(self, username=username, email=email, password=password, phoneNumber=phoneNumber, address=address, first_name=first_name, last_name=last_name, is_staff = True, is_superuser = True)
+    
+    @classmethod
+    def normalize_username(cls, username):
+        return super(Actor, cls).normalize_username(username)
+    
+    @classmethod
+    def normalize_email(cls, email):
+        return super(Actor, cls).normalize_email(email)
+
 
 class SocialIdentities(models.Model):
     nick = models.CharField(max_length=40)
@@ -12,7 +34,7 @@ class SocialIdentities(models.Model):
     profileLink = models.URLField(max_length=50)
     photo = models.URLField(max_length=50)
     user = models.ForeignKey(Actor, on_delete='CASCADE')
-
+    
 
 class Folder(models.Model):
     name = models.CharField(blank=False, max_length=12)
@@ -31,6 +53,10 @@ class Message(models.Model):
     folder = models.ForeignKey(Folder, on_delete='CASCADE')
 
     
+#     class Meta:
+#         permissions = (("can_broadcast","Can broadcast a message"))
+# 
+#     
 class Auditor(Actor):
     permission = 'AUDITOR'
 
@@ -63,17 +89,11 @@ class LegalText(models.Model):
     body = models.TextField(max_length=240)
     applicableLaws = models.PositiveSmallIntegerField(blank=False)
     registrationDate = models.DateField(auto_now_add=True)
-    draftMode = models.BooleanField(null = False)
+    draftMode = models.BooleanField(null=False)
     
     def getFields(self):
-        return ('Title','Body','Applicable Laws','Registration Date','Draft Mode')
+        return ('Title', 'Body', 'Applicable Laws', 'Registration Date', 'Draft Mode')
 
-    def save(self, force_insert=False, force_update=False, using=None, 
-        update_fields=None):
-        print(self.pk)
-        if self.pk is not None:
-            force_update = True
-        return models.Model.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     
 class Category(models.Model):
     name = models.CharField(max_length=40)
@@ -89,7 +109,7 @@ class Trip(models.Model):
     publicationDate = models.DateField
     startDate = models.DateField
     endDate = models.DateField
-    cancelationReasons = models.TextField(blank=True, max_length = 240)
+    cancelationReasons = models.TextField(blank=True, max_length=240)
     category = models.ForeignKey(Category, on_delete='CASCADE')
     legalText = models.ForeignKey(LegalText, on_delete='PROTECT')
 
@@ -118,7 +138,7 @@ class EducationalRecord(models.Model):
     endDate = models.DateField
     institution = models.CharField(max_length=40)
     attachment = models.URLField(blank=True)
-    comments = models.TextField(blank=True, max_length = 240)
+    comments = models.TextField(blank=True, max_length=240)
     curriculum = models.ForeignKey(Curriculum, on_delete='CASCADE')
 
     
@@ -149,12 +169,12 @@ class MiscellaneousRecord(models.Model):
 
 class Finder(models.Model):
     keyword = models.CharField(blank=True, max_length=12)
-    minimumPrice = models.DecimalField(decimal_places=2, max_digits=6, null = True)
-    maximumPrice = models.DecimalField(decimal_places=2, max_digits=6, null = True)
-    minimumDate = models.DateField(null = True)
-    maximimDate = models.DateField(null = True)
+    minimumPrice = models.DecimalField(decimal_places=2, max_digits=6, null=True)
+    maximumPrice = models.DecimalField(decimal_places=2, max_digits=6, null=True)
+    minimumDate = models.DateField(null=True)
+    maximimDate = models.DateField(null=True)
     results = models.ManyToManyField(Trip)
-    lastUse = models.DateTimeField(auto_now_add=True, null = True)
+    lastUse = models.DateTimeField(auto_now_add=True, null=True)
     explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
 
     
@@ -184,8 +204,8 @@ class ConfigurationSystem(models.Model):
 class Application(models.Model):
     madeDate = models.DateField(auto_now_add=True)
     status = models.CharField(choices=(('DUE', 'DUE'), ('PENDING', 'PENDING'), ('REJECTED', 'REJECTED'), ('ACCEPTED', 'ACCEPTED'), ('CANCELLED', 'CANCELLED')), max_length=12)
-    comments = models.TextField(blank=True,max_length=240)
-    rejectedReasons = models.TextField(blank=True,max_length = 240)
+    comments = models.TextField(blank=True, max_length=240)
+    rejectedReasons = models.TextField(blank=True, max_length=240)
     creditCard = models.ForeignKey(CreditCard, on_delete='CASCADE')
     explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
     trip = models.ForeignKey(Trip, on_delete='CASCADE')
