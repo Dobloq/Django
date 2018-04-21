@@ -1,0 +1,15 @@
+{% extends 'base.html' %} 
+{% block title %}
+Formulario
+{% endblock %} 
+{% block content %}
+{% if object.pk is None %}
+<form action="{% url 'AcmeExplorer:folderCreate' %}" method="post">
+{% else %}
+<form action="{% url 'AcmeExplorer:folderUpdate' object.pk %}" method="post">
+{% endif %}
+	{% csrf_token %}
+	{{ form }}
+	<button type="submit">Enviar</button>
+</form>
+{% endblock %}

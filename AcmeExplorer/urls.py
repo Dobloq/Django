@@ -14,8 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from AcmeExplorer.views import home, LegalTextCreate, LegalTextUpdate, LegalTextList, LegalTextDisplay, LegalTextDelete, ExplorerCreate, RangerCreate, AdminCreate, Logout, Login,\
-    SocialIdentitiesList, SocialIdentitiesDisplay, SocialIdentitiesDelete, SocialIdentitiesUpdate, SocialIdentitiesCreate
+from AcmeExplorer.views import *
 
 app_name = "AcmeExplorer"
 urlpatterns = [
@@ -38,6 +37,13 @@ urlpatterns = [
     path('socialIdentities/user/<int:pk>/edit', SocialIdentitiesUpdate.as_view(), name="socialIdentitiesUpdate"),
     path('socialIdentities/user/<int:pk>/delete', SocialIdentitiesDelete.as_view(), name="socialIdentitiesDelete"),
     path('socialIdentities/create', SocialIdentitiesCreate.as_view(), name="socialIdentitiesCreate"),
+    
+    #################################Folder#########################################
+    path('folder/create', FolderCreate.as_view(), name="folderCreate"),
+    path('folder/<int:pk>', FolderDisplay.as_view(), name="folderDisplay"),
+    path('folder/', FolderList.as_view(), name="folderList"),
+    path('folder/<int:pk>/edit', FolderUpdate.as_view(), name="folderUpdate"),
+    path('folder/<int:pk>/delete', FolderDelete.as_view(), name="folderDelete"),
     
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
     path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),

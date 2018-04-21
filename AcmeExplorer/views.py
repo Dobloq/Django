@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 from .models import LegalText, SocialIdentities
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from django.http.response import HttpResponseRedirect
-from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor
+from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor,\
+    Folder
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -101,6 +102,7 @@ class AdminCreate(CreateView):
 
 #Esto solo los admins
 class LegalTextCreate(CreateView):
+    permission_required = 'ADMINISTRATOR'
     model = LegalText
     fields = ['title','body','applicableLaws','draftMode']
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
@@ -115,6 +117,7 @@ class LegalTextCreate(CreateView):
 
 #Esto solo los admins
 class LegalTextUpdate(UpdateView):
+    permission_required = 'ADMINISTRATOR'
     model = LegalText
     fields = ['id','title','body','applicableLaws','draftMode']
     template_name = "AcmeExplorer/legalText/legalText_form.html"
@@ -134,6 +137,7 @@ class LegalTextUpdate(UpdateView):
 
 #Solo los admins
 class LegalTextDelete(DeleteView):
+    permission_required = 'ADMINISTRATOR'
     model = LegalText
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
     
@@ -166,7 +170,6 @@ class LegalTextList(ListView):
 #################################Social Identities#########################################
 
     
-#   nick, socialNetworkName, profileLink, photo, user
 ## Funciona
 class SocialIdentitiesCreate(CreateView):
     model = SocialIdentities
@@ -177,7 +180,6 @@ class SocialIdentitiesCreate(CreateView):
     def post(self, request, *args, **kwargs):
         return CreateView.post(self, request, *args, **kwargs)
 
-#Esto solo los admins
 ## Funciona
 class SocialIdentitiesUpdate(UpdateView):
     model = SocialIdentities
@@ -191,7 +193,6 @@ class SocialIdentitiesUpdate(UpdateView):
         else:
             return HttpResponseRedirect("/AcmeExplorer/")
 
-#Solo los admins
 ## Funciona
 class SocialIdentitiesDelete(DeleteView):
     model = SocialIdentities
@@ -212,22 +213,10 @@ class SocialIdentitiesDisplay(DetailView):
         context['fields'] = SocialIdentities._meta.get_fields()
         return context
 
-#Solo los admins
-## Funciona pero mostrando todas
+## Funciona
 class SocialIdentitiesList(ListView):
     model = SocialIdentities
     template_name = "AcmeExplorer/socialIdentities/socialIdentities_list.html"
-    
-    def get(self, request, *args, **kwargs):
-        try:
-            #userIDS = SocialIdentities.objects.filter(user_=kwargs.get("user_pk"))
-            if kwargs.get("user_pk"):
-                object_list = SocialIdentities.objects.filter(user_id=kwargs.get("user_pk"))
-            else:
-                object_list = SocialIdentities.objects.all()
-        except ObjectDoesNotExist:
-            pass
-        return ListView.get(self, request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         #object_list = SocialIdentities.objects.get(user_id = userId)
@@ -236,8 +225,90 @@ class SocialIdentitiesList(ListView):
         campos = [fields[i].attname for i in range(0, len(fields))]
         lista = list(campos)
         lista.pop(0)
+        object_list = []
+        try:
+            #userIDS = SocialIdentities.objects.filter(user_=kwargs.get("user_pk"))
+            object_list = Folder.objects.filter(user_id = self.request.user.id)
+        except ObjectDoesNotExist:
+            pass
+        context['object_list'] = object_list
         context['fields'] = lista
         context['modelo'] = 'Legal Text'
         return context
 
 
+#################################Folder#########################################
+
+## Funciona
+class FolderCreate(CreateView):
+    model = Folder
+    fields = ['name','systemFolder','user','parentFolder']
+    success_url = reverse_lazy('AcmeExplorer:folderList', )
+    template_name = "AcmeExplorer/folder/folder_form.html"
+    
+    def post(self, request, *args, **kwargs):
+        print()
+        if request.POST["parentFolder"]:
+            pf = Folder.objects.get(pk=int(request.POST["parentFolder"]))
+            if not pf.user.id == request.user.id:
+                return HttpResponseRedirect("/AcmeExplorer/")
+        if not int(request.POST["user"]) == request.user.id:
+            return HttpResponseRedirect("/AcmeExplorer/")
+        else:
+            return CreateView.post(self, request, *args, **kwargs)
+
+## Funciona
+class FolderUpdate(UpdateView):
+    model = Folder
+    fields = ['name','systemFolder','parentFolder']
+    template_name = "AcmeExplorer/folder/folder_form.html"
+    success_url = reverse_lazy('AcmeExplorer:folderList')
+    
+    def get(self, request, *args, **kwargs):
+        if Folder.objects.get(pk=kwargs.get("pk")).user.id == request.user.id:
+            return UpdateView.get(self, request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect("/AcmeExplorer/")
+
+## Funciona
+class FolderDelete(DeleteView):
+    model = Folder
+    success_url = reverse_lazy('AcmeExplorer:folderList')
+    
+    def post(self, request, *args, **kwargs):
+        if Folder.objects.get(pk=kwargs.get("pk")).user.id == request.user.id and Folder.objects.get(pk=kwargs.get("pk")).systemFolder == False:
+            return DeleteView.get(self, request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect("/AcmeExplorer/folder/"+str(kwargs.get("pk")))
+
+## Funciona
+class FolderDisplay(DetailView):
+    model = Folder
+    template_name = "AcmeExplorer/folder/folder_detail.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fields'] = Folder._meta.get_fields()
+        return context
+
+## Funciona
+class FolderList(ListView):
+    model = Folder
+    template_name = "AcmeExplorer/folder/folder_list.html"
+    
+    def get_context_data(self, **kwargs):
+        #object_list = SocialIdentities.objects.get(user_id = userId)
+        context = super().get_context_data(**kwargs)
+        fields = [campo for campo in Folder._meta.fields]
+        campos = [fields[i].attname for i in range(0, len(fields))]
+        lista = list(campos)
+        lista.pop(0)
+        object_list = []
+        try:
+            #userIDS = SocialIdentities.objects.filter(user_=kwargs.get("user_pk"))
+            object_list = Folder.objects.filter(user_id = self.request.user.id)
+        except ObjectDoesNotExist:
+            pass
+        context['object_list'] = object_list
+        context['fields'] = lista
+        context['modelo'] = 'Legal Text'
+        return context

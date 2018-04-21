@@ -2,11 +2,10 @@
 {% block title %} Formulario {% endblock %} 
 {% block content %}
 <table class="displaytag">
-{{object_list}}
 	<thead>
 		<th class="sortable"></th>
 		{% for field in fields %}
-		<th class="sortable"><a>{{ field }}</a></th> 
+		<th class="sortable"><a>{{ field|capfirst }}</a></th> 
 		{% endfor %}
 	</thead>
 	{% for socialIdentities in object_list %}

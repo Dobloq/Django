@@ -10,7 +10,7 @@
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="{{rol}}/edit">Editar perfil</a></li>
-				<li><a href="logout">Salir</a></li>
+				<li><a href="/AcmeExplorer/logout">Salir</a></li>
 			</ul></li>
 		<li><a class="fNiv">Mensajes</a>
 			<ul>
@@ -87,7 +87,7 @@
 
 		<!-- 		Si no esta logueado -->
 		{% if not request.user.is_authenticated %}
-		<li><a class="fNiv" href="login">Login</a>
+		<li><a class="fNiv" href="/AcmeExplorer/login">Login</a>
 		<li><a class="fNiv" href="ranger/nonauth/create">Registrarse
 				como guia</a>
 		<li><a class="fNiv" href="explorer/nonauth/create">Registrarse

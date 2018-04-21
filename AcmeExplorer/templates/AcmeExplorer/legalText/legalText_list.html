@@ -6,7 +6,7 @@
 	<thead>
 		<th class="sortable"></th>
 		{% for field in fields %}
-		<th class="sortable"><a>{{ field }}</a></th> 
+		<th class="sortable"><a>{{ field|capfirst }}</a></th> 
 		{% endfor %}
 	</thead>
 	{% for legalText in object_list %}

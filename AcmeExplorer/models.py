@@ -40,7 +40,10 @@ class Folder(models.Model):
     name = models.CharField(blank=False, max_length=12)
     systemFolder = models.BooleanField(blank=False, default=False)
     user = models.ForeignKey(Actor, on_delete='CASCADE')
-    parentFolder = models.ForeignKey('self', on_delete='CASCADE')
+    parentFolder = models.ForeignKey('self', on_delete='CASCADE', blank=True, null=True)
+    
+    def __str__(self):
+        return self.name
 
 
 class Message(models.Model):
