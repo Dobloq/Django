@@ -44,7 +44,24 @@
 
 		<!-- Content -->
 		<div id="content" class="colM">
-
+		{% if form.errors %}
+{% blocktrans %}
+<p class="errornote">Por favor, introduzca un usuario y clave correctos. Observe que ambos campos pueden ser sensibles a mayúsculas.</p>
+{% endblocktrans %}
+{% else %}
+{% if next %}
+{% if user.is_authenticated %}
+{% blocktrans %}
+<p>Your account doesn't have access to this page. To proceed,
+please login with an account that has access.</p>
+{% endblocktrans %}
+{% else %}
+{% blocktrans %}
+<p>Please login to see this page.</p>
+{% endblocktrans %}
+{% endif %}
+{% endif %}
+{% endif %}
 
 
 

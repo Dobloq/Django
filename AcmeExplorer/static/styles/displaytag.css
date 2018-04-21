@@ -7,7 +7,8 @@
  * http://www.tdg-seville.info/License.html
  * 
  */
-.displaytag {table { border:1pxsolid#666;
+table { 
+	border:1px solid #666 !important; 
 	width: 80%;
 	margin: 20px 0 20px 0 !important;
 }
@@ -159,5 +160,4 @@ span.pagelinks {
 
 .grandtotal-row {
 	border-top: 2px solid black;
-}
 }

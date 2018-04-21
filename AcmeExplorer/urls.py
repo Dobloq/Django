@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from django.contrib.auth.views import login, logout
-from AcmeExplorer.views import home, LegalTextCreate, LegalTextUpdate, LegalTextList, LegalTextDisplay, LegalTextDelete, ExplorerCreate, RangerCreate, AdminCreate, Logout, Login
+from AcmeExplorer.views import home, LegalTextCreate, LegalTextUpdate, LegalTextList, LegalTextDisplay, LegalTextDelete, ExplorerCreate, RangerCreate, AdminCreate, Logout, Login,\
+    SocialIdentitiesList, SocialIdentitiesDisplay, SocialIdentitiesDelete, SocialIdentitiesUpdate, SocialIdentitiesCreate
 
 app_name = "AcmeExplorer"
 urlpatterns = [
@@ -23,11 +23,22 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name="logout"),
     path('login/', Login.as_view(), name="login"),
 #     path('ranger/nonauth/create', createRanger, name="createRanger"),
+
+    #################################Legal Text#########################################
     path('legalText/create/', LegalTextCreate.as_view(), name="legalTextCreate"),
     path('legalText/<int:pk>/edit/', LegalTextUpdate.as_view(), name="legalTextUpdate"),
     path('legalText/<int:pk>/delete/', LegalTextDelete.as_view(), name="legalTextDelete"),
     path('legalText/<int:pk>/', LegalTextDisplay.as_view(), name="legalTextDisplay"),
     path('legalText/', LegalTextList.as_view(), name="legalTextList"),
+    
+    #################################Social Identities#########################################
+    path('socialIdentities/<int:user_pk>/', SocialIdentitiesList.as_view(), name="socialIdentitiesUserList"),
+    path('socialIdentities/', SocialIdentitiesList.as_view(), name="socialIdentitiesList"),
+    path('socialIdentities/user/<int:pk>', SocialIdentitiesDisplay.as_view(), name="socialIdentitiesDisplay"),
+    path('socialIdentities/user/<int:pk>/edit', SocialIdentitiesUpdate.as_view(), name="socialIdentitiesUpdate"),
+    path('socialIdentities/user/<int:pk>/delete', SocialIdentitiesDelete.as_view(), name="socialIdentitiesDelete"),
+    path('socialIdentities/create', SocialIdentitiesCreate.as_view(), name="socialIdentitiesCreate"),
+    
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
     path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),
     path('explorer/create/', ExplorerCreate.as_view(), name="explorerCreate"),

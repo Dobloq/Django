@@ -7,3 +7,5 @@ y despues los argumentos si fueran necesarios, ej: ('AcmeExplorer:displayRanger'
 generic.ListView para listas y generic.DetailView para display, para el ultimo el id se pasa con pk
 
 StackedInline sirve para crear objetos dentro de otros, especificando el model y con extra cuantos, con TabularInline es mas compacto
+
+@login_required(login_url='/accounts/login/')

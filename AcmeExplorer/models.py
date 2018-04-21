@@ -58,23 +58,33 @@ class Message(models.Model):
 # 
 #     
 class Auditor(Actor):
-    permission = 'AUDITOR'
+    
+    class Meta:
+        permissions = (("AUDITOR","Permission for auditor"),)
 
 
 class Administrator(Actor):
-    permission = 'ADMINISTRATOR'
+    
+    class Meta:
+        permissions = (("ADMINISTRATOR","Permission for administrator"),)
 
 
 class Manager(Actor):
-    permission = 'MANAGER'
+    
+    class Meta:
+        permissions = (("MANAGER","Permission for manager"),)
 
 
 class Sponsor(Actor):
-    permission = 'SPONSOR'
+    
+    class Meta:
+        permissions = (("SPONSOR","Permission for sponsor"),)
 
 
 class Explorer(Actor):
-    permission = 'EXPLORER'
+    
+    class Meta:
+        permissions = (("EXPLORER","Permission for explorer"),)
 
 
 class Contact(models.Model):
@@ -115,7 +125,9 @@ class Trip(models.Model):
 
     
 class Ranger(Actor):
-    permission = 'RANGER'
+    
+    class Meta:
+        permissions = (("RANGER","Permission for ranger"),)
 
     
 class Curriculum(models.Model):

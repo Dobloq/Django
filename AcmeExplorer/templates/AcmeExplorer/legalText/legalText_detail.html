@@ -9,7 +9,7 @@ Formulario
 <p>Fecha de redaccion: {{object.registrationDate}}</p>
 <p>Modo borrador: {{object.draftMode|yesno:"Si,No" }}</p>
 <a href="{% url 'AcmeExplorer:legalTextUpdate' object.pk %}"><button type="button">Editar</button></a>
-<form action="{% url 'AcmeExplorer:legalTextDelete' object.pk %}" method="post" onsubmit="askSubmission('¿Esta seguro?', self)">
+<form action="{% url 'AcmeExplorer:legalTextDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
 	{% csrf_token %}
 	<button type="submit">Borrar</button>
 </form>

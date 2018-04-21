@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+{% block title %}
+Formulario
+{% endblock %} 
+{% block content %}
+#   nick, socialNetworkName, profileLink, photo, user
+<p>Nick: {{object.nick}}</p>
+<p>Social network name: {{object.socialNetworkName}}</p>
+<p>Profile link: <a href="{{object.profileLink}}">{{object.profileLink}}</a></p>
+<p>Photo: <a href="{{ object.photo }}">{{ object.photo }}</a></p>
+<p>User: {{object.user.first_name }}</p>
+<a href="{% url 'AcmeExplorer:socialIdentitiesUpdate' object.pk %}"><button type="button">Editar</button></a>
+<form action="{% url 'AcmeExplorer:socialIdentitiesDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+	{% csrf_token %}
+	<button type="submit">Borrar</button>
+</form>
+{% endblock %}

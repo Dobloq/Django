@@ -4,6 +4,7 @@
 
 <div>
 	<ul id="jMenu">
+		{% if request.user.is_authenticated %}
 		<!-- 		Si esta autentificado -->
 		<li><a class="fNiv">Perfil ({{request.user.first_name}})</a>
 			<ul>
@@ -24,8 +25,10 @@
 				<li><a href="folder/actor/list">Ver carpetas</a></li>
 				<li><a href="folder/actor/create">Crear carpeta</a></li>
 			</ul></li>
+		{% endif %}
 
 		<!-- 		Si es administrador -->
+		{% if perms.AcmeExplorer.ADMINISTRATOR %}
 		<li><a class="fNiv">Administrador</a>
 			<ul>
 				<li class="arrow"></li>
@@ -42,7 +45,9 @@
 				<li><a href="trip/other/list">Mostrar viajes</a></li>
 				<li><a href="category/admin/list">Mostrar categorias</a></li>
 			</ul></li>
+		{% endif %}
 
+		{% if perms.AcmeExplorer.MANAGER %}
 		<!-- 		Si es manager -->
 		<li><a class="fNiv">Gerente</a>
 			<ul>
@@ -52,8 +57,10 @@
 				<li><a href="trip/manager/myTrips">Mostrar mis viajes</a></li>
 				<li><a href="application/manager/list">Mostrar solicitudes</a></li>
 			</ul></li>
+		{% endif %}
 
 		<!-- 		Si es explorer -->
+		{% if perms.AcmeExplorer.EXPLORER %}
 		<li><a class="fNiv">Explorador</a>
 			<ul>
 				<li class="arrow"></li>
@@ -64,8 +71,10 @@
 						solicitudes</a></li>
 				<li><a href="contact/explorer/list">Mostrar mis contactos</a></li>
 			</ul></li>
+		{% endif %}
 
 		<!-- 		Si es ranger -->
+		{% if perms.AcmeExplorer.RANGER %}
 		<li><a class="fNiv">Guia</a>
 			<ul>
 				<li class="arrow"></li>
@@ -74,8 +83,10 @@
 				<li><a href="curriculum/ranger/list">Mostrar mis
 						curriculums</a></li>
 			</ul></li>
+		{% endif %}
 
 		<!-- 		Si no esta logueado -->
+		{% if not request.user.is_authenticated %}
 		<li><a class="fNiv" href="login">Login</a>
 		<li><a class="fNiv" href="ranger/nonauth/create">Registrarse
 				como guia</a>
@@ -84,6 +95,7 @@
 		<li><a class="fNiv" href="trip/other/list">Mostrar viajes</a>
 		<li><a class="fNiv" href="category/all/list">Mostrar
 				categorias</a>
+		{% endif %}
 	</ul>
 </div>
 
