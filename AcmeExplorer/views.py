@@ -1,16 +1,15 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import LegalText, SocialIdentities
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from django.http.response import HttpResponseRedirect
 from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor,\
     Folder
+from .forms import FolderForm, SocialIdentitiesForm
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.query import Prefetch
 
 adminP = Permission.objects.get_or_create(codename="ADMINISTRATOR", content_type=ContentType.objects.get_for_model(Administrator))
 auditorP = Permission.objects.get_or_create(codename="AUDITOR", content_type=ContentType.objects.get_for_model(Auditor))
@@ -168,17 +167,27 @@ class LegalTextList(ListView):
         
 
 #################################Social Identities#########################################
-
-    
 ## Funciona
-class SocialIdentitiesCreate(CreateView):
-    model = SocialIdentities
-    fields = ['nick','socialNetworkName','profileLink','photo','user']
-    success_url = reverse_lazy('AcmeExplorer:socialIdentitiesList', )
-    template_name = "AcmeExplorer/socialIdentities/socialIdentities_form.html"
-    
-    def post(self, request, *args, **kwargs):
-        return CreateView.post(self, request, *args, **kwargs)
+def socialIdentitiesCreate(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SocialIdentitiesForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            si = SocialIdentities()
+            actor = Actor.objects.all().filter(pk=request.user.id).get()
+            si.reconstruct(nick=form.cleaned_data['nick'], socialNetworkName=form.cleaned_data['socialNetworkName'], profileLink=form.cleaned_data['profileLink'], photo=form.cleaned_data['photo'], user=actor)
+            si.save()
+            pk = request.user.id
+            return HttpResponseRedirect(reverse('AcmeExplorer:socialIdentitiesUserList', args=(pk, )))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SocialIdentitiesForm()
+
+    return render(request, 'AcmeExplorer/socialIdentities/socialIdentities_form.html', {'form': form})
+
 
 ## Funciona
 class SocialIdentitiesUpdate(UpdateView):
@@ -228,7 +237,7 @@ class SocialIdentitiesList(ListView):
         object_list = []
         try:
             #userIDS = SocialIdentities.objects.filter(user_=kwargs.get("user_pk"))
-            object_list = Folder.objects.filter(user_id = self.request.user.id)
+            object_list = SocialIdentities.objects.filter(user_id = self.request.user.id)
         except ObjectDoesNotExist:
             pass
         context['object_list'] = object_list
@@ -238,46 +247,58 @@ class SocialIdentitiesList(ListView):
 
 
 #################################Folder#########################################
+## Funciona
+def folderCreate(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = FolderForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            folder = Folder()
+            actor = Actor.objects.all().filter(pk=request.user.id).get()
+            folder.reconstruct(name=form.cleaned_data['name'], systemFolder=form.cleaned_data['systemFolder'], user=actor, parentFolder=form.cleaned_data['parentFolder'])
+            folder.save()
+            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:folderList', ))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = FolderForm()
+        form.fields['parentFolder'].queryset = Folder.objects.filter(user_id = request.user.id)
+
+    return render(request, 'AcmeExplorer/folder/folder_form.html', {'form': form})
 
 ## Funciona
-class FolderCreate(CreateView):
-    model = Folder
-    fields = ['name','systemFolder','user','parentFolder']
-    success_url = reverse_lazy('AcmeExplorer:folderList', )
-    template_name = "AcmeExplorer/folder/folder_form.html"
-    
-    def post(self, request, *args, **kwargs):
-        print()
-        if request.POST["parentFolder"]:
-            pf = Folder.objects.get(pk=int(request.POST["parentFolder"]))
-            if not pf.user.id == request.user.id:
-                return HttpResponseRedirect("/AcmeExplorer/")
-        if not int(request.POST["user"]) == request.user.id:
-            return HttpResponseRedirect("/AcmeExplorer/")
-        else:
-            return CreateView.post(self, request, *args, **kwargs)
+def folderUpdate(request, pk):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = FolderForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            folder = Folder()
+            actor = Actor.objects.all().filter(pk=request.user.id).get()
+            folder.reconstruct(name=form.cleaned_data['name'], systemFolder=form.cleaned_data['systemFolder'], user=actor, parentFolder=form.cleaned_data['parentFolder'])
+            folder.save()
+            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:folderList', ))
 
-## Funciona
-class FolderUpdate(UpdateView):
-    model = Folder
-    fields = ['name','systemFolder','parentFolder']
-    template_name = "AcmeExplorer/folder/folder_form.html"
-    success_url = reverse_lazy('AcmeExplorer:folderList')
-    
-    def get(self, request, *args, **kwargs):
-        if Folder.objects.get(pk=kwargs.get("pk")).user.id == request.user.id:
-            return UpdateView.get(self, request, *args, **kwargs)
-        else:
-            return HttpResponseRedirect("/AcmeExplorer/")
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        folderUpdated = Folder.objects.filter(pk=pk).get()
+        form = FolderForm(instance = folderUpdated)
+        form.fields['parentFolder'].queryset = Folder.objects.filter(user_id = request.user.id)
+
+    return render(request, 'AcmeExplorer/folder/folder_form.html', {'form': form})
 
 ## Funciona
 class FolderDelete(DeleteView):
     model = Folder
     success_url = reverse_lazy('AcmeExplorer:folderList')
+    next = reverse_lazy('AcmeExplorer:folderList')
     
     def post(self, request, *args, **kwargs):
         if Folder.objects.get(pk=kwargs.get("pk")).user.id == request.user.id and Folder.objects.get(pk=kwargs.get("pk")).systemFolder == False:
-            return DeleteView.get(self, request, *args, **kwargs)
+            return DeleteView.post(self, request, *args, **kwargs)
         else:
             return HttpResponseRedirect("/AcmeExplorer/folder/"+str(kwargs.get("pk")))
 

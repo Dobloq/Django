@@ -36,13 +36,13 @@ urlpatterns = [
     path('socialIdentities/user/<int:pk>', SocialIdentitiesDisplay.as_view(), name="socialIdentitiesDisplay"),
     path('socialIdentities/user/<int:pk>/edit', SocialIdentitiesUpdate.as_view(), name="socialIdentitiesUpdate"),
     path('socialIdentities/user/<int:pk>/delete', SocialIdentitiesDelete.as_view(), name="socialIdentitiesDelete"),
-    path('socialIdentities/create', SocialIdentitiesCreate.as_view(), name="socialIdentitiesCreate"),
+    path('socialIdentities/create', socialIdentitiesCreate, name="socialIdentitiesCreate"),
     
     #################################Folder#########################################
-    path('folder/create', FolderCreate.as_view(), name="folderCreate"),
+    path('folder/create', folderCreate, name="folderCreate"),
     path('folder/<int:pk>', FolderDisplay.as_view(), name="folderDisplay"),
     path('folder/', FolderList.as_view(), name="folderList"),
-    path('folder/<int:pk>/edit', FolderUpdate.as_view(), name="folderUpdate"),
+    path('folder/<int:pk>/edit', folderUpdate, name="folderUpdate"),
     path('folder/<int:pk>/delete', FolderDelete.as_view(), name="folderDelete"),
     
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),

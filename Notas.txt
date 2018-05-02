@@ -9,3 +9,9 @@ generic.ListView para listas y generic.DetailView para display, para el ultimo e
 StackedInline sirve para crear objetos dentro de otros, especificando el model y con extra cuantos, con TabularInline es mas compacto
 
 @login_required(login_url='/accounts/login/')
+
+Acciones capadas:
+Eliminar carpeta del sistema, eliminar carpeta de otra persona, usar como carpeta padre carpetas de otras personas
+Gestion de legal texts para no administradores excepto list
+Folder solo para autentificados
+SocialIdentities display y list todos, edit, crear, delete autentificados

@@ -35,15 +35,28 @@ class SocialIdentities(models.Model):
     photo = models.URLField(max_length=50)
     user = models.ForeignKey(Actor, on_delete='CASCADE')
     
+    def reconstruct(self, nick, socialNetworkName, profileLink, photo, user):
+        self.nick = nick
+        self.socialNetworkName = socialNetworkName
+        self.profileLink = profileLink
+        self.photo = photo
+        self.user = user
+    
 
 class Folder(models.Model):
     name = models.CharField(blank=False, max_length=12)
     systemFolder = models.BooleanField(blank=False, default=False)
     user = models.ForeignKey(Actor, on_delete='CASCADE')
-    parentFolder = models.ForeignKey('self', on_delete='CASCADE', blank=True, null=True)
+    parentFolder = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.name
+    
+    def reconstruct(self, name, systemFolder, user, parentFolder):
+        self.name = name
+        self.parentFolder = parentFolder
+        self.user = user
+        self.systemFolder = systemFolder
 
 
 class Message(models.Model):
