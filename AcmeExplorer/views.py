@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor, Folder, \
-Message, ConfigurationSystem, LegalText, SocialIdentities, Contact
+Message, ConfigurationSystem, LegalText, SocialIdentities, Contact, Category
 from AcmeExplorer.forms import MessageForm, FolderForm, SocialIdentitiesForm, MessageBroadcastForm, ContactForm
 
 adminP = Permission.objects.get_or_create(codename="ADMINISTRATOR", content_type=ContentType.objects.get_for_model(Administrator))
@@ -570,4 +570,53 @@ class ContactList(ListView):
         context['fields'] = lista
         return context
     
+#################################################### Category ########################################
+
+## Funciona
+# Esto solo los admins
+class CategoryCreate(CreateView):
+    permission_required = 'ADMINISTRATOR'
+    model = Category
+    fields = ['name', 'parentCategory']
+    success_url = reverse_lazy('AcmeExplorer:categoryList')
+    template_name = "AcmeExplorer/category/category_form.html"
+
+
+## Funciona
+# Esto solo los admins
+class CategoryUpdate(UpdateView):
+    permission_required = 'ADMINISTRATOR'
+    model = Category
+    fields = ['name', 'parentCategory']
+    template_name = "AcmeExplorer/category/category_form.html"
+    success_url = reverse_lazy('AcmeExplorer:categoryList')
+    
+## Funciona
+# Solo los admins
+class CategoryDelete(DeleteView):
+    permission_required = 'ADMINISTRATOR'
+    model = Category
+    success_url = reverse_lazy('AcmeExplorer:categoryList')
+    
+    def post(self, request, *args, **kwargs):
+        return DeleteView.post(self, request, *args, **kwargs)
+
+## Funciona
+class CategoryDisplay(DetailView):
+    model = Category
+    template_name = "AcmeExplorer/category/category_detail.html"
+
+## Funciona
+class CategoryList(ListView):
+    model = Category
+    template_name = "AcmeExplorer/category/category_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fields = [campo for campo in Category._meta.fields]
+        campos = [fields[i].attname for i in range(0, len(fields))]
+        lista = list(campos)
+        lista.pop(0)
+        context['fields'] = lista
+        return context
     

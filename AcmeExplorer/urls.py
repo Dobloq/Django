@@ -59,6 +59,13 @@ urlpatterns = [
     path('contact/<int:pk>/edit', contactUpdate, name="contactUpdate"),
     path('contact/<int:pk>/delete', ContactDelete.as_view(), name="contactDelete"),
     
+    ################################# Category #########################################
+    path('category/create/', CategoryCreate.as_view(), name="categoryCreate"),
+    path('category/<int:pk>/edit/', CategoryUpdate.as_view(), name="categoryUpdate"),
+    path('category/<int:pk>/delete/', CategoryDelete.as_view(), name="categoryDelete"),
+    path('category/<int:pk>/', CategoryDisplay.as_view(), name="categoryDisplay"),
+    path('category/', CategoryList.as_view(), name="categoryList"),
+    
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
     path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),
     path('explorer/create/', ExplorerCreate.as_view(), name="explorerCreate"),

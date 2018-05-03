@@ -46,6 +46,9 @@ class Actor(User, UserManager, BaseUserManager):
         folder3.save()
         folder4.save()
         folder5.save()
+        
+        def __str__(self):
+            return self.first_name + " " + self.last_name
 
 
 class SocialIdentities(models.Model):
@@ -53,7 +56,7 @@ class SocialIdentities(models.Model):
     socialNetworkName = models.CharField(max_length=40)
     profileLink = models.URLField(max_length=50)
     photo = models.URLField(max_length=50)
-    user = models.ForeignKey(Actor, on_delete='CASCADE')
+    user = models.ForeignKey(Actor, on_delete=models.CASCADE)
     
     def reconstruct(self, nick, socialNetworkName, profileLink, photo, user):
         self.nick = nick
@@ -66,7 +69,7 @@ class SocialIdentities(models.Model):
 class Folder(models.Model):
     name = models.CharField(blank=False, max_length=20)
     systemFolder = models.BooleanField(blank=False, default=False)
-    user = models.ForeignKey(Actor, on_delete='CASCADE')
+    user = models.ForeignKey(Actor, on_delete=models.CASCADE)
     parentFolder = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
@@ -84,9 +87,9 @@ class Message(models.Model):
     subject = models.CharField(blank=False, max_length=12)
     body = models.CharField(blank=False, max_length=240)
     priority = models.CharField(choices=(('HIGH', 'HIGH'), ('NEUTRAL', 'NEUTRAL'), ('LOW', 'LOW')), max_length=12)
-    senderUser = models.ForeignKey(Actor, on_delete='CASCADE', related_name='senderUser')
-    receiverUser = models.ForeignKey(Actor, on_delete='CASCADE', related_name='receiverUser')
-    folder = models.ForeignKey(Folder, on_delete='CASCADE')
+    senderUser = models.ForeignKey(Actor, on_delete=models.CASCADE, related_name='senderUser')
+    receiverUser = models.ForeignKey(Actor, on_delete=models.CASCADE, related_name='receiverUser')
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
     
     def reconstruct(self, subject, body, priority, senderUser, receiverUser, folder):
         self.subject = subject
@@ -135,7 +138,7 @@ class Contact(models.Model):
     name = models.CharField(max_length=40)
     email = models.EmailField(max_length=40)
     phoneNumber = models.CharField(max_length=40)
-    explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
+    explorer = models.ForeignKey(Explorer, on_delete=models.CASCADE)
     
     def reconstruct(self, name, email, phoneNumber, explorer):
         self.name = name
@@ -157,7 +160,10 @@ class LegalText(models.Model):
     
 class Category(models.Model):
     name = models.CharField(max_length=40)
-    categories = models.ForeignKey('self', on_delete='CASCADE')
+    parentCategory = models.ForeignKey('self', on_delete=models.CASCADE, blank = True, null = True)
+    
+    def __str__(self):
+        return self.name
 
         
 class Trip(models.Model):
@@ -170,7 +176,7 @@ class Trip(models.Model):
     startDate = models.DateField
     endDate = models.DateField
     cancelationReasons = models.TextField(blank=True, max_length=240)
-    category = models.ForeignKey(Category, on_delete='CASCADE')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     legalText = models.ForeignKey(LegalText, on_delete='PROTECT')
 
     
@@ -182,7 +188,7 @@ class Ranger(Actor):
     
 class Curriculum(models.Model):
     ticker = models.CharField(unique=True, max_length=12)
-    ranger = models.ForeignKey(Ranger, on_delete='CASCADE')
+    ranger = models.ForeignKey(Ranger, on_delete=models.CASCADE)
 
 
 class PersonalRecord(models.Model):
@@ -191,7 +197,7 @@ class PersonalRecord(models.Model):
     email = models.EmailField(max_length=50)
     phoneNumber = models.CharField(('phone number'), blank=True, max_length=12)
     linkedInProfile = models.URLField(max_length=50)
-    curriculum = models.ForeignKey(Curriculum, on_delete='CASCADE')
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
 
     
 class EducationalRecord(models.Model):
@@ -201,7 +207,7 @@ class EducationalRecord(models.Model):
     institution = models.CharField(max_length=40)
     attachment = models.URLField(blank=True)
     comments = models.TextField(blank=True, max_length=240)
-    curriculum = models.ForeignKey(Curriculum, on_delete='CASCADE')
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
 
     
 class ProfessionalRecord(models.Model):
@@ -219,14 +225,14 @@ class EndorserRecord(models.Model):
     phoneNumber = models.CharField(max_length=40)
     linkedInProfile = models.URLField(max_length=50)
     comments = models.TextField(blank=True, max_length=240)
-    curriculum = models.ForeignKey(Curriculum, on_delete='CASCADE')
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
 
     
 class MiscellaneousRecord(models.Model):
     title = models.CharField(max_length=40)
     attachment = models.URLField(blank=True)
     comments = models.TextField(blank=True, max_length=240)
-    curriculum = models.ForeignKey(Curriculum, on_delete='CASCADE')
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
 
 
 class Finder(models.Model):
@@ -237,7 +243,7 @@ class Finder(models.Model):
     maximimDate = models.DateField(null=True)
     results = models.ManyToManyField(Trip)
     lastUse = models.DateTimeField(auto_now_add=True, null=True)
-    explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
+    explorer = models.ForeignKey(Explorer, on_delete=models.CASCADE)
 
     
 class CreditCard(models.Model):
@@ -268,9 +274,9 @@ class Application(models.Model):
     status = models.CharField(choices=(('DUE', 'DUE'), ('PENDING', 'PENDING'), ('REJECTED', 'REJECTED'), ('ACCEPTED', 'ACCEPTED'), ('CANCELLED', 'CANCELLED')), max_length=12)
     comments = models.TextField(blank=True, max_length=240)
     rejectedReasons = models.TextField(blank=True, max_length=240)
-    creditCard = models.ForeignKey(CreditCard, on_delete='CASCADE')
-    explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    creditCard = models.ForeignKey(CreditCard, on_delete=models.CASCADE)
+    explorer = models.ForeignKey(Explorer, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
 
 class Audit(models.Model):
@@ -279,8 +285,8 @@ class Audit(models.Model):
     description = models.TextField(max_length=240)
     attachment = models.CharField(blank=True, max_length=50)
     finalMode = models.BooleanField(default=False)
-    auditor = models.ForeignKey(Auditor, on_delete='CASCADE')
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    auditor = models.ForeignKey(Auditor, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
     
 class Note(models.Model):
@@ -288,40 +294,40 @@ class Note(models.Model):
     remark = models.CharField(max_length=40)
     reply = models.CharField(blank=True, max_length=240)
     momentOfReply = models.DateTimeField(blank=True)
-    auditor = models.ForeignKey(Auditor, on_delete='CASCADE')
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    auditor = models.ForeignKey(Auditor, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
     
 class Sponsorship(models.Model):
     banner = models.URLField(max_length=50)
     additionalInfo = models.URLField(max_length=50)
     creditCard = models.ForeignKey(CreditCard, on_delete='SET_NULL')
-    sponsor = models.ForeignKey(Sponsor, on_delete='CASCADE')
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
 
 class SurvivalClass(models.Model):
     title = models.CharField(max_length=40)
     description = models.TextField(max_length=240)
     organizationMoment = models.DateTimeField(auto_now_add=True)
-    location = models.ForeignKey(Location, on_delete='CASCADE')
-    manager = models.ForeignKey(Manager, on_delete='CASCADE')
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
     
 class Story(models.Model):
     title = models.CharField(max_length=40)
     pieceOfText = models.TextField(max_length=240)
     attachments = models.TextField(blank=True, max_length=240)
-    explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    explorer = models.ForeignKey(Explorer, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
 
 class Stage(models.Model):
     title = models.CharField(max_length=40)
     description = models.TextField(max_length=240)
     price = models.DecimalField
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
     
 class Tag(models.Model):
@@ -330,5 +336,5 @@ class Tag(models.Model):
 
 class TagValue(models.Model):
     value = models.CharField(max_length=40)
-    trip = models.ForeignKey(Trip, on_delete='CASCADE')
-    tag = models.ForeignKey(Tag, on_delete='CASCADE')
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
