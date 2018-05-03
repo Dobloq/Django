@@ -1,0 +1,11 @@
+{% extends 'base.html' %} 
+{% block title %}
+Formulario
+{% endblock %} 
+{% block content %}
+<form action="{% url 'AcmeExplorer:messageBroadcast' %}" method="post">
+	{% csrf_token %}
+	{{ form }}
+	<button type="submit">Enviar</button>
+</form>
+{% endblock %}

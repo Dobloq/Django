@@ -4,7 +4,7 @@ Formulario
 {% endblock %} 
 {% block content %}
 {% if object.pk is None %}
-<form action="{% url 'AcmeExplorer:messageBroadcast' %}" method="post">
+<form action="{% url 'AcmeExplorer:messageCreate' %}" method="post">
 {% else %}
 <form action="{% url 'AcmeExplorer:messageUpdate' object.pk %}" method="post">
 {% endif %}
