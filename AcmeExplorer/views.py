@@ -1,15 +1,17 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from .models import LegalText, SocialIdentities
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from django.http.response import HttpResponseRedirect
 from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor,\
-    Folder
-from .forms import FolderForm, SocialIdentitiesForm
+    Folder, Message, ConfigurationSystem
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import Permission
+from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from AcmeExplorer.forms import MessageForm, FolderForm, SocialIdentitiesForm, MessageBroadcastForm
 
 adminP = Permission.objects.get_or_create(codename="ADMINISTRATOR", content_type=ContentType.objects.get_for_model(Administrator))
 auditorP = Permission.objects.get_or_create(codename="AUDITOR", content_type=ContentType.objects.get_for_model(Auditor))
@@ -333,3 +335,121 @@ class FolderList(ListView):
         context['fields'] = lista
         context['modelo'] = 'Legal Text'
         return context
+    
+########################################################## Message #####################################################
+# sentDate, subject, body, priority, senderUser, receiverUser, folder
+#'subject','body','priority','receiverUser'
+# sentDate, subject, priority, senderUser, folder
+
+## Funciona
+def messageCreate(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = MessageForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            message = Message()
+            actor = Actor.objects.all().filter(pk=request.user.id).get()
+            folderSender = Folder.objects.filter(user_id=request.user.id).filter(name="Out box").get()
+            folderReceiver = Folder.objects.filter(user_id = form.cleaned_data['receiverUser'].id).filter(name="In box").get()
+            message.reconstruct(subject=form.cleaned_data['subject'], body=form.cleaned_data['body'], priority=form.cleaned_data['priority'], receiverUser=form.cleaned_data['receiverUser'], senderUser=actor, folder=folderSender)
+            message.save()
+            message2 = Message()
+            if any(s.lower() in form.cleaned_data['subject'].lower() for s in ConfigurationSystem.objects.all().get().spamWords) or any(s.lower() in form.cleaned_data['body'].lower() for s in ConfigurationSystem.objects.all().get().spamWords):
+                folder = Folder.objects.filter(user_id = message.receiverUser.id, name = "Spam box").get()
+                message2.reconstruct(subject=form.cleaned_data['subject'], body=form.cleaned_data['body'], priority=form.cleaned_data['priority'], receiverUser=form.cleaned_data['receiverUser'], senderUser=actor, folder=folder)    
+            else:
+                message2.reconstruct(subject=form.cleaned_data['subject'], body=form.cleaned_data['body'], priority=form.cleaned_data['priority'], receiverUser=form.cleaned_data['receiverUser'], senderUser=actor, folder=folderReceiver)
+            message2.save()
+            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:messageList', ))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = MessageForm()
+        form.fields['receiverUser'].queryset = Actor.objects.exclude(pk = request.user.id)
+
+    return render(request, 'AcmeExplorer/message/message_form.html', {'form': form})
+
+@permission_required('AcmeExplorer.ADMINISTRATOR')
+def messageBroadcast(request):
+    if request.method == 'POST':
+        form = MessageBroadcastForm(request.POST)
+        if form.is_valid():
+            actors = Actor.objects.all()
+            subject = form.cleaned_data['subject']
+            body = form.cleaned_data['body']
+            priority = form.cleaned_data['priority']
+            senderUser = actors.filter(pk=request.user.id).get()
+            [broadcast(subject, body, priority, senderUser, actor) for actor in actors]
+            #broadcast(subject, body, priority, senderUser, senderUser)
+            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:messageList', ))
+        #if form.is_valid():
+    
+    else:
+        form = MessageBroadcastForm()
+
+    return render(request, 'AcmeExplorer/message/message_form.html', {'form': form})
+        
+def broadcast(subject, body, priority, senderUser, actor):
+    message = Message()
+    message.subject = subject
+    message.body = body
+    message.priority = priority
+    message.senderUser = senderUser
+    folder = Folder.objects.filter(name="In box", user_id = actor.id).get()
+    message.folder = folder
+    message.receiverUser = actor
+    message.save()
+            
+
+## Funciona
+class MessageList(ListView):
+    model = Message
+    template_name = "AcmeExplorer/message/message_list.html"
+    
+    def get_context_data(self, **kwargs):
+        #object_list = SocialIdentities.objects.get(user_id = userId)
+        context = super().get_context_data(**kwargs)
+        fields = [campo for campo in Message._meta.fields]
+        campos = [fields[i].attname for i in range(0, len(fields))]
+        lista = list(campos)
+        lista.pop(0)
+        lista.pop(2)
+        lista.pop(4)
+        object_list = []
+        try:
+            object_list = Message.objects.filter(Q(senderUser_id = self.request.user.id) | Q(receiverUser_id = self.request.user.id))
+        except ObjectDoesNotExist:
+            pass
+        context['object_list'] = object_list.filter(folder__user_id = self.request.user.id)
+        context['fields'] = lista
+        return context
+
+## Funciona
+class MessageDisplay(DetailView):
+    model = Message
+    template_name = "AcmeExplorer/message/message_detail.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fields'] = Message._meta.get_fields()
+        return context
+
+## Funciona
+class MessageDelete(DeleteView):
+    model = Message
+    success_url = reverse_lazy('AcmeExplorer:messageList')
+    next = reverse_lazy('AcmeExplorer:messageList')
+    
+    def post(self, request, *args, **kwargs):
+        message = Message.objects.get(pk=kwargs.get("pk"))
+        if message.senderUser.id == request.user.id or message.receiverUser.id == request.user.id:
+            if message.folder.name == "Trash box":
+                return DeleteView.post(self, request, *args, **kwargs)
+            else:
+                folder = Folder.objects.filter(user_id = request.user.id, name = "Trash box").get()
+                message.folder = folder
+                message.save()
+                return HttpResponseRedirect("/AcmeExplorer/message")
+        else:
+            return HttpResponseRedirect("/AcmeExplorer/message/"+str(kwargs.get("pk")))

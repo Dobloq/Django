@@ -23,14 +23,14 @@ urlpatterns = [
     path('login/', Login.as_view(), name="login"),
 #     path('ranger/nonauth/create', createRanger, name="createRanger"),
 
-    #################################Legal Text#########################################
+    ################################# Legal Text #########################################
     path('legalText/create/', LegalTextCreate.as_view(), name="legalTextCreate"),
     path('legalText/<int:pk>/edit/', LegalTextUpdate.as_view(), name="legalTextUpdate"),
     path('legalText/<int:pk>/delete/', LegalTextDelete.as_view(), name="legalTextDelete"),
     path('legalText/<int:pk>/', LegalTextDisplay.as_view(), name="legalTextDisplay"),
     path('legalText/', LegalTextList.as_view(), name="legalTextList"),
     
-    #################################Social Identities#########################################
+    ################################# Social Identities #########################################
     path('socialIdentities/<int:user_pk>/', SocialIdentitiesList.as_view(), name="socialIdentitiesUserList"),
     path('socialIdentities/', SocialIdentitiesList.as_view(), name="socialIdentitiesList"),
     path('socialIdentities/user/<int:pk>', SocialIdentitiesDisplay.as_view(), name="socialIdentitiesDisplay"),
@@ -38,12 +38,20 @@ urlpatterns = [
     path('socialIdentities/user/<int:pk>/delete', SocialIdentitiesDelete.as_view(), name="socialIdentitiesDelete"),
     path('socialIdentities/create', socialIdentitiesCreate, name="socialIdentitiesCreate"),
     
-    #################################Folder#########################################
+    ################################# Folder #########################################
     path('folder/create', folderCreate, name="folderCreate"),
     path('folder/<int:pk>', FolderDisplay.as_view(), name="folderDisplay"),
     path('folder/', FolderList.as_view(), name="folderList"),
     path('folder/<int:pk>/edit', folderUpdate, name="folderUpdate"),
     path('folder/<int:pk>/delete', FolderDelete.as_view(), name="folderDelete"),
+    
+    ################################## Message ##############################################
+    path('message/create', messageCreate, name="messageCreate"),
+    path('message/<int:pk>', MessageDisplay.as_view(), name="messageDisplay"),
+    path('message/', MessageList.as_view(), name="messageList"),
+    path('message/<int:pk>/delete', MessageDelete.as_view(), name="messageDelete"),
+    path('message/broadcast', messageBroadcast, name="messageBroadcast"),
+    
     
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
     path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),

@@ -19,8 +19,10 @@
 				<li><a href="message/actor/create">Enviar mensaje</a></li>
 
 				<!-- 		Si es administrador -->
-				<li><a href="message/admin/messageToAll"></a></li>
-
+				{% if perms.AcmeExplorer.ADMINISTRATOR %}
+				<li><a href="message/admin/messageToAll">Enviar mensaje a todos</a></li>
+				{% endif %}
+				
 				<!-- 		Si esta autentificado -->
 				<li><a href="folder/actor/list">Ver carpetas</a></li>
 				<li><a href="folder/actor/create">Crear carpeta</a></li>

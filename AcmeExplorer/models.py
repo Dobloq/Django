@@ -14,10 +14,13 @@ class Actor(User, UserManager, BaseUserManager):
         print(passwo)
         actor.set_password(password)
         actor.save()
+        actor.createDefaultFolders()
         return actor
     
     def superusuario(self, username, email, password, phoneNumber=None, address=None, first_name=None, last_name=None):
-        return Actor.create_user(self, username=username, email=email, password=password, phoneNumber=phoneNumber, address=address, first_name=first_name, last_name=last_name, is_staff = True, is_superuser = True)
+        actor = Actor.create_user(self, username=username, email=email, password=password, phoneNumber=phoneNumber, address=address, first_name=first_name, last_name=last_name, is_staff = True, is_superuser = True)
+        actor.createDefaultFolders()
+        return actor
     
     @classmethod
     def normalize_username(cls, username):
@@ -26,6 +29,23 @@ class Actor(User, UserManager, BaseUserManager):
     @classmethod
     def normalize_email(cls, email):
         return super(Actor, cls).normalize_email(email)
+    
+    def createDefaultFolders(self):
+        folder1 = Folder()
+        folder2 = Folder()
+        folder3 = Folder()
+        folder4 = Folder()
+        folder5 = Folder()
+        folder1.reconstruct("In box", True, self, None)
+        folder2.reconstruct("Out box", True, self, None)
+        folder3.reconstruct("Spam box", True, self, None)
+        folder4.reconstruct("Notification box", True, self, None)
+        folder5.reconstruct("Trash box", True, self, None)
+        folder1.save()
+        folder2.save()
+        folder3.save()
+        folder4.save()
+        folder5.save()
 
 
 class SocialIdentities(models.Model):
@@ -44,7 +64,7 @@ class SocialIdentities(models.Model):
     
 
 class Folder(models.Model):
-    name = models.CharField(blank=False, max_length=12)
+    name = models.CharField(blank=False, max_length=20)
     systemFolder = models.BooleanField(blank=False, default=False)
     user = models.ForeignKey(Actor, on_delete='CASCADE')
     parentFolder = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
@@ -67,6 +87,14 @@ class Message(models.Model):
     senderUser = models.ForeignKey(Actor, on_delete='CASCADE', related_name='senderUser')
     receiverUser = models.ForeignKey(Actor, on_delete='CASCADE', related_name='receiverUser')
     folder = models.ForeignKey(Folder, on_delete='CASCADE')
+    
+    def reconstruct(self, subject, body, priority, senderUser, receiverUser, folder):
+        self.subject = subject
+        self.body = body
+        self.priority = priority
+        self.senderUser = senderUser
+        self.receiverUser = receiverUser
+        self.folder = folder
 
     
 #     class Meta:

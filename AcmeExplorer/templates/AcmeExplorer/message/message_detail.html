@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+{% block title %}
+Formulario
+{% endblock %} 
+{% block content %}
+<p>Fecha de envio: {{object.sentDate}}</p>
+<p>Remitente: {{object.senderUser.first_name}}</p>
+<p>Asunto: {{object.subject}}</p>
+<p>Mensaje: {{object.body}}</p>
+<p>Prioridad: {{object.priority|lower|capfirst}}</p>
+<p>Guardado en: {{object.folder.name}}</p>
+<br>
+<form action="{% url 'AcmeExplorer:messageDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+	{% csrf_token %}
+	<button type="submit">Borrar</button>
+</form>
+{% endblock %}
