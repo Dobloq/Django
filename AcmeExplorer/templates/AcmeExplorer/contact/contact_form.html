@@ -4,9 +4,9 @@ Formulario
 {% endblock %} 
 {% block content %}
 {% if pk is None %}
-<form action="{% url 'AcmeExplorer:folderCreate' %}" method="post">
+<form action="{% url 'AcmeExplorer:contactCreate' %}" method="post">
 {% else %}
-<form action="{% url 'AcmeExplorer:folderUpdate' pk %}" method="post">
+<form action="{% url 'AcmeExplorer:contactUpdate' pk %}" method="post">
 {% endif %}
 	{% csrf_token %}
 	{{ form }}

@@ -52,6 +52,12 @@ urlpatterns = [
     path('message/<int:pk>/delete', MessageDelete.as_view(), name="messageDelete"),
     path('message/broadcast', messageBroadcast, name="messageBroadcast"),
     
+    ################################## Contact #############################################33
+    path('contact/create', contactCreate, name="contactCreate"),
+    path('contact/<int:pk>', ContactDisplay.as_view(), name="contactDisplay"),
+    path('contact/', ContactList.as_view(), name="contactList"),
+    path('contact/<int:pk>/edit', contactUpdate, name="contactUpdate"),
+    path('contact/<int:pk>/delete', ContactDelete.as_view(), name="contactDelete"),
     
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
     path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),

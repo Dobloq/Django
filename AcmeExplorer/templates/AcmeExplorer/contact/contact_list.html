@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+{% block title %} Listado {% endblock %} 
+{% block content %}
+<table class="displaytag">
+
+	<thead>
+		<th class="sortable"></th>
+		{% for field in fields %}
+		<th class="sortable"><a>{{ field|capfirst }}</a></th> 
+		{% endfor %}
+	</thead>
+	{% for contact in object_list %}
+	{% if forloop.counter|divisibleby:2 %}
+	<tr class="even">
+	{% else %}
+	<tr class="odd">
+	{% endif %}
+		<td><a href="{% url 'AcmeExplorer:contactDisplay' contact.id %}">Mostrar</a></td>
+		<td>{{ contact.name }}</td>
+		<td>{{ contact.email }}</td>
+		<td>{{ contact.phoneNumber }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<a href="{% url 'AcmeExplorer:contactCreate' %}">Crear contacto</a>
+<br><br>
+{% endblock %}

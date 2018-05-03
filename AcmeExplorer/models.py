@@ -136,6 +136,12 @@ class Contact(models.Model):
     email = models.EmailField(max_length=40)
     phoneNumber = models.CharField(max_length=40)
     explorer = models.ForeignKey(Explorer, on_delete='CASCADE')
+    
+    def reconstruct(self, name, email, phoneNumber, explorer):
+        self.name = name
+        self.email = email
+        self.phoneNumber = phoneNumber
+        self.explorer = explorer
 
     
 class LegalText(models.Model):

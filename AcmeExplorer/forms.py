@@ -4,7 +4,7 @@ Created on 16 abr. 2018
 @author: X2835
 '''
 from django import forms
-from .models import Folder, SocialIdentities, Message
+from .models import Folder, SocialIdentities, Message, Contact
 
 class Formulario(forms.Form):
     nombre = forms.CharField(label="Nombre", max_length=100)
@@ -41,3 +41,8 @@ class MessageBroadcastForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['subject','body','priority']
+        
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name','email','phoneNumber']
