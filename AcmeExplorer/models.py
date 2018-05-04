@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import UserManager, BaseUserManager, User
 from django.contrib.auth.hashers import make_password
+from datetime import date
+import random, string
 
 
 # Create your models here.
@@ -338,3 +340,10 @@ class TagValue(models.Model):
     value = models.CharField(max_length=40)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+def generarTicker():
+    fecha = date.today().strftime("%y%m%d")
+    letras = ""
+    [letras+=random.choice(string.ascii_uppercase) for n in range(0,2)]
+    ticker = fecha + "-" + letras
+    return ticker
