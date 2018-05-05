@@ -672,7 +672,7 @@ class CurriculumDisplay(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['fields'] = Contact._meta.get_fields()
+        context['fields'] = Curriculum._meta.get_fields()
         return context
 
 ## Funciona
