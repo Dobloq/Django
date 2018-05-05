@@ -191,7 +191,7 @@ class Ranger(Actor):
 class Curriculum(models.Model):
     ticker = models.CharField(unique=True, max_length=12)
     ranger = models.ForeignKey(Ranger, on_delete=models.CASCADE)
-
+    
 
 class PersonalRecord(models.Model):
     name = models.CharField(max_length=40)
@@ -344,6 +344,9 @@ class TagValue(models.Model):
 def generarTicker():
     fecha = date.today().strftime("%y%m%d")
     letras = ""
-    [letras+=random.choice(string.ascii_uppercase) for n in range(0,2)]
+    letras += random.choice(string.ascii_uppercase)
+    letras += random.choice(string.ascii_uppercase)
+    letras += random.choice(string.ascii_uppercase)
+    letras += random.choice(string.ascii_uppercase)
     ticker = fecha + "-" + letras
     return ticker

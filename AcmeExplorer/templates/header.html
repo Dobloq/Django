@@ -1,3 +1,4 @@
+{% load i18n %}
 <div id="banner">
 	<img id="bannerImg" src="{{bannerUrl}}" alt="Acme Explorer., Inc.">
 </div>
@@ -15,17 +16,17 @@
 		<li><a class="fNiv">Mensajes</a>
 			<ul>
 				<li class="arrow"></li>
-				<li><a href="message/actor/list">Ver mensajes</a></li>
-				<li><a href="message/actor/create">Enviar mensaje</a></li>
+				<li><a href="/AcmeExplorer/message/">Ver mensajes</a></li>
+				<li><a href="/AcmeExplorer/message/create">Enviar mensaje</a></li>
 
 				<!-- 		Si es administrador -->
 				{% if perms.AcmeExplorer.ADMINISTRATOR %}
-				<li><a href="message/admin/messageToAll">Enviar mensaje a todos</a></li>
+				<li><a href="/AcmeExplorer/message/broadcast">Enviar mensaje a todos</a></li>
 				{% endif %}
 				
 				<!-- 		Si esta autentificado -->
-				<li><a href="folder/actor/list">Ver carpetas</a></li>
-				<li><a href="folder/actor/create">Crear carpeta</a></li>
+				<li><a href="/AcmeExplorer/folder">Ver carpetas</a></li>
+				<li><a href="/AcmeExplorer/folder/create">Crear carpeta</a></li>
 			</ul></li>
 		{% endif %}
 
@@ -38,14 +39,14 @@
 						configuracion</a></li>
 				<li><a href="dashboard/admin/display">Mostrar panel de
 						control</a></li>
-				<li><a href="legalText/admin/list">Mostrar textos legales</a></li>
+				<li><a href="/AcmeExplorer/legalText/">Mostrar textos legales</a></li>
 				<li><a href="tag/admin/list">Mostrar etiquetas</a></li>
 				<li><a href="ranger/admin/list">Mostrar guias</a></li>
 				<li><a href="ranger/admin/create">Nuevo guia</a></li>
 				<li><a href="manager/admin/list">Mostrar gerentes</a></li>
 				<li><a href="manager/admin/create">Nuevo gerente</a></li>
 				<li><a href="trip/other/list">Mostrar viajes</a></li>
-				<li><a href="category/admin/list">Mostrar categorias</a></li>
+				<li><a href="/AcmeExplorer/category">Mostrar categorias</a></li>
 			</ul></li>
 		{% endif %}
 
@@ -54,7 +55,7 @@
 		<li><a class="fNiv">Gerente</a>
 			<ul>
 				<li class="arrow"></li>
-				<li><a href="category/all/list">Mostrar categorias</a></li>
+				<li><a href="/AcmeExplorer/category/">Mostrar categorias</a></li>
 				<li><a href="trip/manager/list">Mostrar viajes</a></li>
 				<li><a href="trip/manager/myTrips">Mostrar mis viajes</a></li>
 				<li><a href="application/manager/list">Mostrar solicitudes</a></li>
@@ -66,12 +67,12 @@
 		<li><a class="fNiv">Explorador</a>
 			<ul>
 				<li class="arrow"></li>
-				<li><a href="category/all/list">Mostrar categorias</a></li>
+				<li><a href="/AcmeExplorer/category">Mostrar categorias</a></li>
 				<li><a href="trip/explorer/list">Mostrar viajes</a></li>
 				<li><a href="trip/explorer/myTrips">Mostrar mis viajes</a></li>
 				<li><a href="application/explorer/list">Mostrar mis
 						solicitudes</a></li>
-				<li><a href="contact/explorer/list">Mostrar mis contactos</a></li>
+				<li><a href="/AcmeExplorer/contact">Mostrar mis contactos</a></li>
 			</ul></li>
 		{% endif %}
 
@@ -80,9 +81,9 @@
 		<li><a class="fNiv">Guia</a>
 			<ul>
 				<li class="arrow"></li>
-				<li><a href="category/all/list">Mostrar categorias</a></li>
+				<li><a href="/AcmeExplorer/category">Mostrar categorias</a></li>
 				<li><a href="trip/other/list">Mostrar viajes</a></li>
-				<li><a href="curriculum/ranger/list">Mostrar mis
+				<li><a href="/AcmeExplorer/curriculum">Mostrar mis
 						curriculums</a></li>
 			</ul></li>
 		{% endif %}
@@ -90,17 +91,13 @@
 		<!-- 		Si no esta logueado -->
 		{% if not request.user.is_authenticated %}
 		<li><a class="fNiv" href="/AcmeExplorer/login">Login</a>
-		<li><a class="fNiv" href="ranger/nonauth/create">Registrarse
+		<li><a class="fNiv" href="/AcmeExplorer/ranger/create">Registrarse
 				como guia</a>
-		<li><a class="fNiv" href="explorer/nonauth/create">Registrarse
+		<li><a class="fNiv" href="/AcmeExplorer/explorer/create">Registrarse
 				como explorador</a>
 		<li><a class="fNiv" href="trip/other/list">Mostrar viajes</a>
-		<li><a class="fNiv" href="category/all/list">Mostrar
+		<li><a class="fNiv" href="/AcmeExplorer/category">Mostrar
 				categorias</a>
 		{% endif %}
 	</ul>
-</div>
-
-<div>
-	<a href="espanol">es</a> | <a href="ingles">en</a>
 </div>

@@ -66,6 +66,12 @@ urlpatterns = [
     path('category/<int:pk>/', CategoryDisplay.as_view(), name="categoryDisplay"),
     path('category/', CategoryList.as_view(), name="categoryList"),
     
+    ################################# Curriculum #####################################
+    path('curriculum/create', curriculumCreate, name="curriculumCreate"),
+    path('curriculum/ranger', CurriculumRangerList.as_view(), name="curriculumRangerList"),
+    path('curriculum/<int:pk>', CurriculumDisplay.as_view(), name="curriculumDisplay"),
+    path('curriculum/<int:pk>/delete', CurriculumDelete.as_view(), name="curriculumDelete"),
+    
     #path('actor/create/', ActorCreate.as_view(), name="actorCreate"),
     path('ranger/create/', RangerCreate.as_view(), name="rangerCreate"),
     path('explorer/create/', ExplorerCreate.as_view(), name="explorerCreate"),

@@ -7,10 +7,12 @@ from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import Permission
 from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor, Folder, \
-Message, ConfigurationSystem, LegalText, SocialIdentities, Contact, Category
+Message, ConfigurationSystem, LegalText, SocialIdentities, Contact, Category, Curriculum
 from AcmeExplorer.forms import MessageForm, FolderForm, SocialIdentitiesForm, MessageBroadcastForm, ContactForm
+import string, random
+from datetime import date
 
 adminP = Permission.objects.get_or_create(codename="ADMINISTRATOR", content_type=ContentType.objects.get_for_model(Administrator))
 auditorP = Permission.objects.get_or_create(codename="AUDITOR", content_type=ContentType.objects.get_for_model(Auditor))
@@ -26,6 +28,15 @@ managerP = Permission.objects.get_or_create(codename="MANAGER", content_type=Con
 # auditor = Permission.objects.create(codename="AUDITOR", name="Permission for auditors")
 # manager = Permission.objects.create(codename="MANAGER", name="Permission for managers")
 
+def generarTicker():
+    fecha = date.today().strftime("%y%m%d")
+    letras = ""
+    letras += random.choice(string.ascii_uppercase)
+    letras += random.choice(string.ascii_uppercase)
+    letras += random.choice(string.ascii_uppercase)
+    letras += random.choice(string.ascii_uppercase)
+    ticker = fecha + "-" + letras
+    return ticker
 
 # Create your views here.
 def home(request):
@@ -65,7 +76,7 @@ class RangerCreate(CreateView):
         if form.is_valid():
             datos = form.cleaned_data
             ranger = Actor.create_user(self, datos['username'], datos['email'], datos['password'], datos['phoneNumber'], datos['address'], datos['first_name'], datos['last_name'])
-            ranger.user_permissions.add(rangerP)
+            ranger.user_permissions.add(rangerP[0])
             return HttpResponseRedirect('/AcmeExplorer/')
         else:
             return HttpResponseRedirect('/AcmeExplorer/ranger/create', {"form":form})
@@ -391,7 +402,7 @@ def messageCreate(request):
 
 
 # # Funciona
-@permission_required('AcmeExplorer.ADMINISTRATOR')
+@permission_required('AcmeExplorer.ADMINISTRATOR', raise_exception=PermissionDenied)
 def messageBroadcast(request):
     if request.method == 'POST':
         form = MessageBroadcastForm(request.POST)
@@ -620,3 +631,61 @@ class CategoryList(ListView):
         context['fields'] = lista
         return context
     
+###################################### Curriculum ##################################
+
+## Funciona
+@permission_required('AcmeExplorer.RANGER', '/AcmeExplorer/login')
+def curriculumCreate(request):
+    ranger = Ranger.objects.get(pk=request.user.id)
+    curriculum = Curriculum()
+    curriculum.ticker = generarTicker()
+    curriculum.ranger = ranger
+    curriculum.save()
+    return HttpResponseRedirect(reverse_lazy('AcmeExplorer:curriculumRangerList',))
+
+
+## Funciona
+class CurriculumRangerList(ListView):
+    model = Curriculum
+    template_name = "AcmeExplorer/curriculum/curriculum_list.html"
+    
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fields = [campo for campo in Curriculum._meta.fields]
+        campos = [fields[i].attname for i in range(0, len(fields))]
+        lista = list(campos)
+        lista.pop(0)
+        lista.pop(1)
+        object_list = []
+        try:
+            object_list = Curriculum.objects.filter(ranger_id=self.request.user.id)
+        except ObjectDoesNotExist:
+            pass
+        context['object_list'] = object_list
+        context['fields'] = lista
+        return context
+
+## Funciona        
+class CurriculumDisplay(DetailView):
+    model = Curriculum
+    template_name = "AcmeExplorer/curriculum/curriculum_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fields'] = Contact._meta.get_fields()
+        return context
+
+## Funciona
+class CurriculumDelete(DeleteView):
+    permission_required = 'RANGER'
+    model = Curriculum
+    success_url = reverse_lazy('AcmeExplorer:curriculumRangerList')
+    next = reverse_lazy('AcmeExplorer:curriculumRangerList')
+    
+    def post(self, request, *args, **kwargs):
+        if Curriculum.objects.get(pk=kwargs.get("pk")).ranger.id == request.user.id:
+            return DeleteView.post(self, request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:curriculumRangerList',))
+
+
