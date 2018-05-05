@@ -219,6 +219,7 @@ class ProfessionalRecord(models.Model):
     attachment = models.URLField(blank=True)
     role = models.CharField(max_length=40)
     comments = models.TextField(blank=True, max_length=240)
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
 
 
 class EndorserRecord(models.Model):

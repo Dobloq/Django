@@ -1,24 +1,21 @@
-<html lang="en-us">
+{% extends 'base.html' %}
 {% load %} {% load i18n %} {% load cache %}
-<head>
-<title>Log in</title>
+{% block title %} Log in {% endblock %}
+{% block extrahead %}
 <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
 <link rel="stylesheet" type="text/css"
 	href="/static/admin/css/login.css" />
-
-
-
+<script type="text/javascript">
+	$("document").ready(function(){$("body").addClass("login")})
+</script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css"
 	href="/static/admin/css/responsive.css" />
-</head>
-
-
-<body class=" login">
-
+{% endblock %}
 	<!-- Container -->
+	{% block content %}
 	<div id="container">
 
 
@@ -105,6 +102,4 @@ please login with an account that has access.</p>
 		<div id="footer"></div>
 	</div>
 	<!-- END Container -->
-
-</body>
-</html>
+{% endblock %}

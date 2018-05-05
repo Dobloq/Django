@@ -7,9 +7,15 @@
 		<th class="sortable"></th>
 		{% for field in fields %}
 		<th class="sortable"><a>{{ field|capfirst }}</a></th> 
+		<th class="sortable"><a>Personal record</a></th> 
+		<th class="sortable"><a>Educational record</a></th> 
+		<th class="sortable"><a>Professional record</a></th> 
+		<th class="sortable"><a>Endorser record</a></th> 
+		<th class="sortable"><a>Miscellaneous record</a></th>
 		{% endfor %}
 	</thead>
 	{% for curriculum in object_list %}
+	{{curriculum.personalrecord_set.get.id}}
 	{% if forloop.counter|divisibleby:2 %}
 	<tr class="even">
 	{% else %}
@@ -17,6 +23,11 @@
 	{% endif %}
 		<td><a href="{% url 'AcmeExplorer:curriculumDisplay' curriculum.id %}">Mostrar</a></td>
 		<td>{{ curriculum.ticker }}</td>
+		<td>{% for personal in curriculum.personalrecord_set.all %}<a href="{% url 'AcmeExplorer:curriculumDisplay' curriculum.personalrecord_set.get.id %}">{{ curriculum.personalrecord_set.get.name }}</a>{% endfor %}</td>
+		<td>{% for record in curriculum.educationalrecord_set.all %}<a href="{% url 'AcmeExplorer:educationalDisplay' record.id %}">{{ record.diplomaTitle }}</a><br>{% endfor %}</td>
+		<td>{% for record in curriculum.professionalrecord_set.all %}<a href="{% url 'AcmeExplorer:professionalDisplay' record.id %}">{{ record.companyName }}</a><br>{% endfor %}</td>
+		<td>{% for record in curriculum.endorserrecord_set.all %}<a href="{% url 'AcmeExplorer:endorserDisplay' record.id %}">{{ record.name }}</a><br>{% endfor %}</td>
+		<td>{% for record in curriculum.miscellaneousrecord_set.all %}<a href="{% url 'AcmeExplorer:miscellaneousDisplay' record.id %}">{{ record.title }}</a><br>{% endfor %}</td>
 	</tr>
 	{% endfor %}
 </table>

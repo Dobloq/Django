@@ -26,7 +26,7 @@ SECRET_KEY = '7_j(dz6+f!ch3ntsj%d6veg4)eff7v0_%b2c4kv$b8b4*k*ma9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost','localhost:8000','testserver',]
 
 LANGUAGES = [
     ('es', _('Spanish')),

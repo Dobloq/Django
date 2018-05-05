@@ -68,7 +68,8 @@ urlpatterns = [
     
     ################################# Curriculum #####################################
     path('curriculum/create', curriculumCreate, name="curriculumCreate"),
-    path('curriculum/ranger', CurriculumRangerList.as_view(), name="curriculumRangerList"),
+    path('curriculum/', CurriculumList.as_view(), name="curriculumList"),
+    path('curriculum/ranger/<int:pk>', CurriculumRangerList.as_view(), name="curriculumRangerList"),
     path('curriculum/<int:pk>', CurriculumDisplay.as_view(), name="curriculumDisplay"),
     path('curriculum/<int:pk>/delete', CurriculumDelete.as_view(), name="curriculumDelete"),
     

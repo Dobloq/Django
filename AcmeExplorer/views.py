@@ -5,11 +5,12 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 from django.http.response import HttpResponseRedirect
 from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import Permission
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from AcmeExplorer.models import Actor, Ranger, Explorer, Manager, Administrator, Sponsor, Auditor, Folder, \
-Message, ConfigurationSystem, LegalText, SocialIdentities, Contact, Category, Curriculum
+Message, ConfigurationSystem, LegalText, SocialIdentities, Contact, Category, Curriculum, PersonalRecord, \
+EducationalRecord, ProfessionalRecord, EndorserRecord, MiscellaneousRecord
 from AcmeExplorer.forms import MessageForm, FolderForm, SocialIdentitiesForm, MessageBroadcastForm, ContactForm
 import string, random
 from datetime import date
@@ -100,6 +101,7 @@ class ExplorerCreate(CreateView):
 
     
 class AdminCreate(CreateView):
+    permission_required = 'ADMINISTRATOR'
     model = Administrator
     fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
     success_url = reverse_lazy('AcmeExplorer:home')
@@ -123,13 +125,6 @@ class LegalTextCreate(CreateView):
     fields = ['title', 'body', 'applicableLaws', 'draftMode']
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
     template_name = "AcmeExplorer/legalText/legalText_form.html"
-    
-    def get(self, request, *args, **kwargs):
-        u = request.user
-        if isinstance(u, Administrator):
-            return CreateView.get(self, request, *args, **kwargs)
-        else:
-            return HttpResponseRedirect('/AcmeExplorer/')
 
 
 # Esto solo los admins
@@ -145,10 +140,8 @@ class LegalTextUpdate(UpdateView):
         l = LegalText
         l = l.objects.get(pk=idL)
         condicion = l.draftMode == False
-        if not isinstance(request.user, Administrator):
-            return HttpResponseRedirect('/AcmeExplorer/legalText/')
-        elif condicion:
-            return HttpResponseRedirect('/AcmeExplorer/')
+        if condicion:
+            raise PermissionDenied()
         else:
             return UpdateView.get(self, request, *args, **kwargs)
 
@@ -158,12 +151,6 @@ class LegalTextDelete(DeleteView):
     permission_required = 'ADMINISTRATOR'
     model = LegalText
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
-    
-    def get(self, request, *args, **kwargs):
-        if isinstance(request.user, Administrator):
-            return DeleteView.get(self, request, *args, **kwargs)
-        else:
-            return HttpResponseRedirect('/AcmeExplorer/')
 
 
 class LegalTextDisplay(DetailView):
@@ -189,6 +176,7 @@ class LegalTextList(ListView):
 
 #################################Social Identities#########################################
 # # Funciona
+@login_required(login_url="/AcmeExplorer/login")
 def socialIdentitiesCreate(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -218,10 +206,12 @@ class SocialIdentitiesUpdate(UpdateView):
     success_url = reverse_lazy('AcmeExplorer:socialIdentitiesList')
     
     def get(self, request, *args, **kwargs):
-        if SocialIdentities.objects.get(pk=kwargs.get("pk")).user.id == request.user.id:
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        elif SocialIdentities.objects.get(pk=kwargs.get("pk")).user.id == request.user.id:
             return UpdateView.get(self, request, *args, **kwargs)
         else:
-            return HttpResponseRedirect("/AcmeExplorer/")
+            raise PermissionDenied()
 
 
 # # Funciona
@@ -230,10 +220,12 @@ class SocialIdentitiesDelete(DeleteView):
     success_url = reverse_lazy('AcmeExplorer:socialIdentitiesList')
     
     def get(self, request, *args, **kwargs):
-        if SocialIdentities.objects.get(pk=kwargs.get("pk")).user.id == request.user.id:
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        elif SocialIdentities.objects.get(pk=kwargs.get("pk")).user.id == request.user.id:
             return DeleteView.get(self, request, *args, **kwargs)
         else:
-            return HttpResponseRedirect("/AcmeExplorer/")
+            raise PermissionDenied()
 
 
 # # Funciona
@@ -273,6 +265,7 @@ class SocialIdentitiesList(ListView):
 
 #################################Folder#########################################
 # # Funciona
+@login_required(login_url="/AcmeExplorer/login")
 def folderCreate(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -295,8 +288,12 @@ def folderCreate(request):
 
 
 # # Funciona
+@login_required(login_url="/AcmeExplorer/login")
 def folderUpdate(request, pk):
     # if this is a POST request we need to process the form data
+    folder = Folder.objects.get(pk=pk)
+    if folder.user.id != request.user.id:
+        raise PermissionDenied()
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = FolderForm(request.POST)
@@ -324,16 +321,23 @@ class FolderDelete(DeleteView):
     next = reverse_lazy('AcmeExplorer:folderList')
     
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
         if Folder.objects.get(pk=kwargs.get("pk")).user.id == request.user.id and Folder.objects.get(pk=kwargs.get("pk")).systemFolder == False:
             return DeleteView.post(self, request, *args, **kwargs)
         else:
-            return HttpResponseRedirect("/AcmeExplorer/folder/" + str(kwargs.get("pk")))
+            raise PermissionDenied()
 
 
 # # Funciona
 class FolderDisplay(DetailView):
     model = Folder
     template_name = "AcmeExplorer/folder/folder_detail.html"
+    
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        return DetailView.get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -345,6 +349,11 @@ class FolderDisplay(DetailView):
 class FolderList(ListView):
     model = Folder
     template_name = "AcmeExplorer/folder/folder_list.html"
+    
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        return ListView.get(self, request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         # object_list = SocialIdentities.objects.get(user_id = userId)
@@ -371,6 +380,7 @@ class FolderList(ListView):
 
 
 # # Funciona
+@login_required(login_url="/AcmeExplorer/login")
 def messageCreate(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -440,6 +450,11 @@ class MessageList(ListView):
     model = Message
     template_name = "AcmeExplorer/message/message_list.html"
     
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        return ListView.get(self, request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         # object_list = SocialIdentities.objects.get(user_id = userId)
         context = super().get_context_data(**kwargs)
@@ -463,6 +478,11 @@ class MessageList(ListView):
 class MessageDisplay(DetailView):
     model = Message
     template_name = "AcmeExplorer/message/message_detail.html"
+    
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        return DetailView.get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -478,7 +498,9 @@ class MessageDelete(DeleteView):
     
     def post(self, request, *args, **kwargs):
         message = Message.objects.get(pk=kwargs.get("pk"))
-        if message.senderUser.id == request.user.id or message.receiverUser.id == request.user.id:
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        elif message.senderUser.id == request.user.id or message.receiverUser.id == request.user.id:
             if message.folder.name == "Trash box":
                 return DeleteView.post(self, request, *args, **kwargs)
             else:
@@ -487,7 +509,7 @@ class MessageDelete(DeleteView):
                 message.save()
                 return HttpResponseRedirect("/AcmeExplorer/message")
         else:
-            return HttpResponseRedirect("/AcmeExplorer/message/" + str(kwargs.get("pk")))
+            raise PermissionDenied()
 
         
 ###################################### Contact ###########################################
@@ -531,7 +553,7 @@ def contactUpdate(request, pk):
     else:
         contactUpdated = Contact.objects.get(pk=pk)
         if contactUpdated.explorer.id != request.user.id:
-            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:contactList',))
+            raise PermissionDenied()
         form = ContactForm(instance=contactUpdated)
 
     return render(request, 'AcmeExplorer/contact/contact_form.html', {'form': form, 'pk':pk})
@@ -557,7 +579,7 @@ class ContactDelete(DeleteView):
         if Contact.objects.get(pk=kwargs.get("pk")).explorer.id == request.user.id:
             return DeleteView.post(self, request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:contactList',))
+            raise PermissionDenied()
 
 ## Funciona
 class ContactList(ListView):
@@ -641,10 +663,36 @@ def curriculumCreate(request):
     curriculum.ticker = generarTicker()
     curriculum.ranger = ranger
     curriculum.save()
-    return HttpResponseRedirect(reverse_lazy('AcmeExplorer:curriculumRangerList',))
+    return HttpResponseRedirect(reverse_lazy('AcmeExplorer:curriculumList',))
 
 
 ## Funciona
+class CurriculumList(ListView):
+    permission_required = 'RANGER'
+    model = Curriculum
+    template_name = "AcmeExplorer/curriculum/curriculum_list.html"
+    
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        fields = [campo for campo in Curriculum._meta.fields]
+        campos = [fields[i].attname for i in range(0, len(fields))]
+        #context['personal'] = PersonalRecord.objects.filter(curriculum_id=self.kwargs['pk'])
+        #context['educational'] = EducationalRecord.objects.filter(curriculum_id=self.kwargs['pk'])
+        #context['professional'] = ProfessionalRecord.objects.filter(curriculum_id=self.kwargs['pk'])
+        #context['endorser'] = EndorserRecord.objects.filter(curriculum_id=self.kwargs['pk'])
+        #context['miscellaneous'] = MiscellaneousRecord.objects.filter(curriculum_id=self.kwargs['pk'])
+        lista = list(campos)
+        lista.pop(0)
+        lista.pop(1)
+        object_list = []
+        try:
+            object_list = Curriculum.objects.filter(ranger_id=self.request.user.id)
+        except ObjectDoesNotExist:
+            pass
+        context['object_list'] = object_list
+        context['fields'] = lista
+        return context
+    
 class CurriculumRangerList(ListView):
     model = Curriculum
     template_name = "AcmeExplorer/curriculum/curriculum_list.html"
@@ -658,7 +706,7 @@ class CurriculumRangerList(ListView):
         lista.pop(1)
         object_list = []
         try:
-            object_list = Curriculum.objects.filter(ranger_id=self.request.user.id)
+            object_list = Curriculum.objects.filter(ranger_id=self.kwargs['pk'])
         except ObjectDoesNotExist:
             pass
         context['object_list'] = object_list
@@ -679,13 +727,13 @@ class CurriculumDisplay(DetailView):
 class CurriculumDelete(DeleteView):
     permission_required = 'RANGER'
     model = Curriculum
-    success_url = reverse_lazy('AcmeExplorer:curriculumRangerList')
-    next = reverse_lazy('AcmeExplorer:curriculumRangerList')
+    success_url = reverse_lazy('AcmeExplorer:curriculumList')
+    next = reverse_lazy('AcmeExplorer:curriculumList')
     
     def post(self, request, *args, **kwargs):
         if Curriculum.objects.get(pk=kwargs.get("pk")).ranger.id == request.user.id:
             return DeleteView.post(self, request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse_lazy('AcmeExplorer:curriculumRangerList',))
+            raise PermissionDenied()
 
 
