@@ -1,13 +1,13 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}
 Formulario
-{% endblock %} 
+{% endblock %}
 {% block content %}
 <p>Nombre: {{object.name}}</p>
 <p>Email: {{object.email}}</p>
 <p>Numero de telefono: {{object.phoneNumber}}</p>
 <a href="{% url 'AcmeExplorer:contactUpdate' object.pk %}"><button type="button">Editar</button></a>
-<form action="{% url 'AcmeExplorer:contactDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<form action="{% url 'AcmeExplorer:contactDelete' object.pk %}" method="post" onsubmit="return confirm('Â¿Esta seguro?')">
 	{% csrf_token %}
 	<button type="submit">Borrar</button>
 </form>

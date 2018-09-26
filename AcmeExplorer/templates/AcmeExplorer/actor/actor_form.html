@@ -1,7 +1,9 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
 {% block title %}
 Formulario
-{% endblock %} 
+{% endblock %}
 {% block content %}
 {% if object.pk is None %}
 <form action="{% url 'AcmeExplorer:actorCreate' %}" method="post">
@@ -9,6 +11,6 @@ Formulario
 {% endif %}
 	{% csrf_token %}
 	{{ form }}
-	<button type="submit">Enviar</button>
+	<button type="submit">{% trans 'Save' %}</button>
 </form>
 {% endblock %}

@@ -1,15 +1,15 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}
 Formulario
-{% endblock %} 
+{% endblock %}
 {% block content %}
 <p>Nombre: {{object.name}}</p>
 <p>Carpeta del sistema: {{object.systemFolder|yesno:"Si,No"}}</p>
 <p>Carpeta padre: {% if object.parentFolder %}<a href="{% url 'AcmeExplorer:folderDisplay' object.parentFolder.id%}">{{object.parentFolder.name}}</a></p>{% endif %}
 <br>
 <a href="{% url 'AcmeExplorer:folderUpdate' object.pk %}"><button type="button">Editar</button></a>
-<a href="{% url 'AcmeExplorer:folderDelete' object.pk %}"><button type="button" onclick="return confirm('¿Esta seguro?')">Borrar</button></a>
-<form action="{% url 'AcmeExplorer:folderDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<a href="{% url 'AcmeExplorer:folderDelete' object.pk %}"><button type="button" onclick="return confirm('Â¿Esta seguro?')">Borrar</button></a>
+<form action="{% url 'AcmeExplorer:folderDelete' object.pk %}" method="post" onsubmit="return confirm('Â¿Esta seguro?')">
 	{% csrf_token %}
 	<button type="submit">Borrar</button>
 </form>

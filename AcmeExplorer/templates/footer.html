@@ -1,11 +1,26 @@
+{% load i18n %}
 <div>
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		function cambiarIdioma(idioma){
-			$.post("http://localhost:8000/i18n/setlang/", 
-					{"language":idioma, "csrfmiddlewaretoken":$('[name=csrfmiddlewaretoken]').val(), "next":document.location.href}, 
+			$.post("{% url 'set_language' %}",
+					{"language":idioma, "csrfmiddlewaretoken":$('[name=csrfmiddlewaretoken]').val(), "next":document.location.href},
 					function(){window.location.reload()})
 		}
 	</script>
-	<a href="" onclick="cambiarIdioma('es')">es</a> | <a href="" onclick="cambiarIdioma('en')">en</a>
+	<a href="" onclick="cambiarIdioma('es')">es</a> | <a href="" onclick="cambiarIdioma('en')">en</a> -->
+	<form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Go">
+</form>
 </div>
 <b>Copyright &copy; {% now  "D d M Y"%} Acme Explorer., Inc.</b>

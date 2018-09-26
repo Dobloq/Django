@@ -1,13 +1,13 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}
 Formulario
-{% endblock %} 
+{% endblock %}
 {% block content %}
 <p>Nombre: {{object.name}}</p>
 <p>Categoria padre: {{object.parentCategory.name}}</p>
-<a href="{% url 'AcmeExplorer:categoryUpdate' object.pk %}"><button type="button">Editar</button></a>
-<form action="{% url 'AcmeExplorer:categoryDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<a href="{% url 'AcmeExplorer:categoryUpdate' object.pk %}"><button type="button">{% trans "Edit" %}</button></a>
+<form action="{% url 'AcmeExplorer:categoryDelete' object.pk %}" method="post" onsubmit="return confirm(gettext('Â¿Esta seguro?'))">
 	{% csrf_token %}
-	<button type="submit">Borrar</button>
+	<button type="submit">{% trans "Delete" %}</button>
 </form>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %} {% trans 'Acción no permitida' %} {% endblock %}
+{% block title %} {% trans 'AcciÃ³n no permitida' %} {% endblock %}
 {% block content %}
 {% if user.is_authenticated %}
 
@@ -9,7 +9,7 @@ Lo sentimos, no tiene permisos para realizar esa operacion
 
 {% else %}
 
-Es necesario que se registre o <a href="{% url 'AcmeExplorer:login' %}">inicie sesión</a> para realizar esa operación.
+Es necesario que se registre o <a href="{% url 'AcmeExplorer:login' %}">inicie sesiÃ³n</a> para realizar esa operaciÃ³n.
 
 {% endif %}
 {% endblock %}

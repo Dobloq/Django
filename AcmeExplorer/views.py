@@ -14,6 +14,7 @@ EducationalRecord, ProfessionalRecord, EndorserRecord, MiscellaneousRecord
 from AcmeExplorer.forms import MessageForm, FolderForm, SocialIdentitiesForm, MessageBroadcastForm, ContactForm
 import string, random
 from datetime import date
+from django.utils.translation import gettext as _
 
 adminP = Permission.objects.get_or_create(codename="ADMINISTRATOR", content_type=ContentType.objects.get_for_model(Administrator))
 auditorP = Permission.objects.get_or_create(codename="AUDITOR", content_type=ContentType.objects.get_for_model(Auditor))
@@ -49,7 +50,7 @@ def home(request):
 #     fields = ["first_name","last_name","username","password","email","phoneNumber","address"]
 #     success_url = reverse_lazy('AcmeExplorer:home')
 #     template_name = "AcmeExplorer/actor/actor_form.html"
-#     
+#
 #     def post(self, request, *args, **kwargs):
 #         form = self.get_form()
 #         if form.is_valid():
@@ -61,17 +62,17 @@ def home(request):
 class Logout(LogoutView):
     next_page = "/AcmeExplorer/"
 
-    
+
 class Login(LoginView):
     next_page = "/AcmeExplorer/"
 
 
 class RangerCreate(CreateView):
     model = Ranger
-    fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
+    fields = [_("first_name"), _("last_name"), _("username"), _("password"), _("email"), _("phoneNumber"), _("address")]
     success_url = reverse_lazy('AcmeExplorer:home')
     template_name = "AcmeExplorer/ranger/ranger_form.html"
-    
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -82,13 +83,13 @@ class RangerCreate(CreateView):
         else:
             return HttpResponseRedirect('/AcmeExplorer/ranger/create', {"form":form})
 
-        
+
 class ExplorerCreate(CreateView):
     model = Explorer
-    fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
+    fields = [_("first_name"), _("last_name"), _("username"), _("password"), _("email"), _("phoneNumber"), _("address")]
     success_url = reverse_lazy('AcmeExplorer:home')
     template_name = "AcmeExplorer/explorer/explorer_form.html"
-    
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -99,30 +100,30 @@ class ExplorerCreate(CreateView):
         else:
             return HttpResponseRedirect('/AcmeExplorer/explorer/create', {"form":form})
 
-    
+
 class AdminCreate(CreateView):
     permission_required = 'ADMINISTRATOR'
     model = Administrator
-    fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
+    fields = [_("first_name"), _("last_name"), _("username"), _("password"), _("email"), _("phoneNumber"), _("address")]
     success_url = reverse_lazy('AcmeExplorer:home')
     template_name = "AcmeExplorer/admin/admin_form.html"
-    
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             datos = form.cleaned_data
             admin = Actor.create_user(self, datos['username'], datos['email'], datos['password'], datos['phoneNumber'], datos['address'], datos['first_name'], datos['last_name'])
-            admin.user_permissions.add(adminP)
+            admin.user_permissions.add(adminP[0])
             return HttpResponseRedirect('/AcmeExplorer/')
         else:
             return HttpResponseRedirect('/AcmeExplorer/admin/create', {"form":form})
-    
+
 
 # Esto solo los admins
 class LegalTextCreate(CreateView):
     permission_required = 'ADMINISTRATOR'
     model = LegalText
-    fields = ['title', 'body', 'applicableLaws', 'draftMode']
+    fields = [_('title'), _('body'), _('applicableLaws'), _('draftMode')]
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
     template_name = "AcmeExplorer/legalText/legalText_form.html"
 
@@ -131,10 +132,10 @@ class LegalTextCreate(CreateView):
 class LegalTextUpdate(UpdateView):
     permission_required = 'ADMINISTRATOR'
     model = LegalText
-    fields = ['id', 'title', 'body', 'applicableLaws', 'draftMode']
+    fields = [_('id'), _('title'), _('body'), _('applicableLaws'), _('draftMode')]
     template_name = "AcmeExplorer/legalText/legalText_form.html"
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
-    
+
     def get(self, request, *args, **kwargs):
         idL = kwargs.get('pk')
         l = LegalText
@@ -170,9 +171,9 @@ class LegalTextList(ListView):
         lista = list(campos)
         lista.pop(0)
         context['fields'] = lista
-        context['modelo'] = 'Legal Text'
+        context['modelo'] = _('Legal Text')
         return context
-        
+
 
 #################################Social Identities#########################################
 # # Funciona
@@ -201,10 +202,10 @@ def socialIdentitiesCreate(request):
 # # Funciona
 class SocialIdentitiesUpdate(UpdateView):
     model = SocialIdentities
-    fields = ['nick', 'socialNetworkName', 'profileLink', 'photo']
+    fields = [_('nick'), _('socialNetworkName'), _('profileLink'), _('photo')]
     template_name = "AcmeExplorer/socialIdentities/socialIdentities_form.html"
     success_url = reverse_lazy('AcmeExplorer:socialIdentitiesList')
-    
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
@@ -218,7 +219,7 @@ class SocialIdentitiesUpdate(UpdateView):
 class SocialIdentitiesDelete(DeleteView):
     model = SocialIdentities
     success_url = reverse_lazy('AcmeExplorer:socialIdentitiesList')
-    
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
@@ -243,7 +244,7 @@ class SocialIdentitiesDisplay(DetailView):
 class SocialIdentitiesList(ListView):
     model = SocialIdentities
     template_name = "AcmeExplorer/socialIdentities/socialIdentities_list.html"
-    
+
     def get_context_data(self, **kwargs):
         # object_list = SocialIdentities.objects.get(user_id = userId)
         context = super().get_context_data(**kwargs)
@@ -259,7 +260,7 @@ class SocialIdentitiesList(ListView):
             pass
         context['object_list'] = object_list
         context['fields'] = lista
-        context['modelo'] = 'Legal Text'
+        context['modelo'] = _('Social identity')
         return context
 
 
@@ -319,7 +320,7 @@ class FolderDelete(DeleteView):
     model = Folder
     success_url = reverse_lazy('AcmeExplorer:folderList')
     next = reverse_lazy('AcmeExplorer:folderList')
-    
+
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
@@ -333,7 +334,7 @@ class FolderDelete(DeleteView):
 class FolderDisplay(DetailView):
     model = Folder
     template_name = "AcmeExplorer/folder/folder_detail.html"
-    
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
@@ -349,12 +350,12 @@ class FolderDisplay(DetailView):
 class FolderList(ListView):
     model = Folder
     template_name = "AcmeExplorer/folder/folder_list.html"
-    
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
         return ListView.get(self, request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         # object_list = SocialIdentities.objects.get(user_id = userId)
         context = super().get_context_data(**kwargs)
@@ -370,9 +371,9 @@ class FolderList(ListView):
             pass
         context['object_list'] = object_list
         context['fields'] = lista
-        context['modelo'] = 'Legal Text'
+        context['modelo'] = _('Folder')
         return context
-    
+
 ########################################################## Message #####################################################
 # sentDate, subject, body, priority, senderUser, receiverUser, folder
 # 'subject','body','priority','receiverUser'
@@ -397,7 +398,7 @@ def messageCreate(request):
             message2 = Message()
             if any(s.lower() in form.cleaned_data['subject'].lower() for s in ConfigurationSystem.objects.all().get().spamWords) or any(s.lower() in form.cleaned_data['body'].lower() for s in ConfigurationSystem.objects.all().get().spamWords):
                 folder = Folder.objects.filter(user_id=message.receiverUser.id, name="Spam box").get()
-                message2.reconstruct(subject=form.cleaned_data['subject'], body=form.cleaned_data['body'], priority=form.cleaned_data['priority'], receiverUser=form.cleaned_data['receiverUser'], senderUser=actor, folder=folder)    
+                message2.reconstruct(subject=form.cleaned_data['subject'], body=form.cleaned_data['body'], priority=form.cleaned_data['priority'], receiverUser=form.cleaned_data['receiverUser'], senderUser=actor, folder=folder)
             else:
                 message2.reconstruct(subject=form.cleaned_data['subject'], body=form.cleaned_data['body'], priority=form.cleaned_data['priority'], receiverUser=form.cleaned_data['receiverUser'], senderUser=actor, folder=folderReceiver)
             message2.save()
@@ -426,13 +427,13 @@ def messageBroadcast(request):
             # broadcast(subject, body, priority, senderUser, senderUser)
             return HttpResponseRedirect(reverse_lazy('AcmeExplorer:messageList',))
         # if form.is_valid():
-    
+
     else:
         form = MessageBroadcastForm()
 
     return render(request, 'AcmeExplorer/message/messageBroadcast_form.html', {'form': form})
 
-        
+
 def broadcast(subject, body, priority, senderUser, actor):
     message = Message()
     message.subject = subject
@@ -443,18 +444,18 @@ def broadcast(subject, body, priority, senderUser, actor):
     message.folder = folder
     message.receiverUser = actor
     message.save()
-            
+
 
 # # Funciona
 class MessageList(ListView):
     model = Message
     template_name = "AcmeExplorer/message/message_list.html"
-    
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
         return ListView.get(self, request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         # object_list = SocialIdentities.objects.get(user_id = userId)
         context = super().get_context_data(**kwargs)
@@ -478,7 +479,7 @@ class MessageList(ListView):
 class MessageDisplay(DetailView):
     model = Message
     template_name = "AcmeExplorer/message/message_detail.html"
-    
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated():
             raise PermissionDenied()
@@ -495,7 +496,7 @@ class MessageDelete(DeleteView):
     model = Message
     success_url = reverse_lazy('AcmeExplorer:messageList')
     next = reverse_lazy('AcmeExplorer:messageList')
-    
+
     def post(self, request, *args, **kwargs):
         message = Message.objects.get(pk=kwargs.get("pk"))
         if not request.user.is_authenticated():
@@ -511,7 +512,7 @@ class MessageDelete(DeleteView):
         else:
             raise PermissionDenied()
 
-        
+
 ###################################### Contact ###########################################
 ## Funciona
 def contactCreate(request):
@@ -574,7 +575,7 @@ class ContactDelete(DeleteView):
     model = Contact
     success_url = reverse_lazy('AcmeExplorer:contactList')
     next = reverse_lazy('AcmeExplorer:contactList')
-    
+
     def post(self, request, *args, **kwargs):
         if Contact.objects.get(pk=kwargs.get("pk")).explorer.id == request.user.id:
             return DeleteView.post(self, request, *args, **kwargs)
@@ -585,7 +586,7 @@ class ContactDelete(DeleteView):
 class ContactList(ListView):
     model = Contact
     template_name = "AcmeExplorer/contact/contact_list.html"
-    
+
     def get_context_data(self, **kwargs):
         # object_list = SocialIdentities.objects.get(user_id = userId)
         context = super().get_context_data(**kwargs)
@@ -602,7 +603,7 @@ class ContactList(ListView):
         context['object_list'] = object_list
         context['fields'] = lista
         return context
-    
+
 #################################################### Category ########################################
 
 ## Funciona
@@ -610,7 +611,7 @@ class ContactList(ListView):
 class CategoryCreate(CreateView):
     permission_required = 'ADMINISTRATOR'
     model = Category
-    fields = ['name', 'parentCategory']
+    fields = [_('name'), _('parentCategory')]
     success_url = reverse_lazy('AcmeExplorer:categoryList')
     template_name = "AcmeExplorer/category/category_form.html"
 
@@ -620,17 +621,17 @@ class CategoryCreate(CreateView):
 class CategoryUpdate(UpdateView):
     permission_required = 'ADMINISTRATOR'
     model = Category
-    fields = ['name', 'parentCategory']
+    fields = [_('name'), _('parentCategory')]
     template_name = "AcmeExplorer/category/category_form.html"
     success_url = reverse_lazy('AcmeExplorer:categoryList')
-    
+
 ## Funciona
 # Solo los admins
 class CategoryDelete(DeleteView):
     permission_required = 'ADMINISTRATOR'
     model = Category
     success_url = reverse_lazy('AcmeExplorer:categoryList')
-    
+
     def post(self, request, *args, **kwargs):
         return DeleteView.post(self, request, *args, **kwargs)
 
@@ -652,7 +653,7 @@ class CategoryList(ListView):
         lista.pop(0)
         context['fields'] = lista
         return context
-    
+
 ###################################### Curriculum ##################################
 
 ## Funciona
@@ -671,7 +672,7 @@ class CurriculumList(ListView):
     permission_required = 'RANGER'
     model = Curriculum
     template_name = "AcmeExplorer/curriculum/curriculum_list.html"
-    
+
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         fields = [campo for campo in Curriculum._meta.fields]
@@ -692,11 +693,11 @@ class CurriculumList(ListView):
         context['object_list'] = object_list
         context['fields'] = lista
         return context
-    
+
 class CurriculumRangerList(ListView):
     model = Curriculum
     template_name = "AcmeExplorer/curriculum/curriculum_list.html"
-    
+
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         fields = [campo for campo in Curriculum._meta.fields]
@@ -713,7 +714,7 @@ class CurriculumRangerList(ListView):
         context['fields'] = lista
         return context
 
-## Funciona        
+## Funciona
 class CurriculumDisplay(DetailView):
     model = Curriculum
     template_name = "AcmeExplorer/curriculum/curriculum_detail.html"
@@ -729,11 +730,9 @@ class CurriculumDelete(DeleteView):
     model = Curriculum
     success_url = reverse_lazy('AcmeExplorer:curriculumList')
     next = reverse_lazy('AcmeExplorer:curriculumList')
-    
+
     def post(self, request, *args, **kwargs):
         if Curriculum.objects.get(pk=kwargs.get("pk")).ranger.id == request.user.id:
             return DeleteView.post(self, request, *args, **kwargs)
         else:
             raise PermissionDenied()
-
-
