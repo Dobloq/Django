@@ -1,17 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Details' %}
 {% endblock %}
 {% block content %}
 
-<p>Nick: {{object.nick}}</p>
-<p>Social network name: {{object.socialNetworkName}}</p>
-<p>Profile link: <a href="{{object.profileLink}}">{{object.profileLink}}</a></p>
-<p>Photo: <a href="{{ object.photo }}">{{ object.photo }}</a></p>
-<p>User: {{object.user.first_name }}</p>
-<a href="{% url 'AcmeExplorer:socialIdentitiesUpdate' object.pk %}"><button type="button">Editar</button></a>
-<form action="{% url 'AcmeExplorer:socialIdentitiesDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<p>{% trans 'Nick' %}: {{object.nick}}</p>
+<p>{% trans 'Social network name' %}: {{object.socialNetworkName}}</p>
+<p>{% trans 'Profile link' %}: <a href="{{object.profileLink}}">{{object.profileLink}}</a></p>
+<p>{% trans 'Photo' %}: <a href="{{ object.photo }}">{{ object.photo }}</a></p>
+<p>{% trans 'User' %}: {{object.user.first_name }}</p>
+<a href="{% url 'AcmeExplorer:socialIdentitiesUpdate' object.pk %}"><button type="button">{% trans 'Edit' %}</button></a>
+<form action="{% url 'AcmeExplorer:socialIdentitiesDelete' object.pk %}" method="post" onsubmit="return confirm(gettext('¿Esta seguro?'))">
 	{% csrf_token %}
-	<button type="submit">Borrar</button>
+	<button type="submit">{% trans 'Delete' %}</button>
 </form>
 {% endblock %}

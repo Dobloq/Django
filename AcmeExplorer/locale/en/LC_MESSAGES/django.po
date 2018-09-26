@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-26 16:56+0200\n"
+"POT-Creation-Date: 2018-09-26 18:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,18 +22,223 @@ msgstr ""
 msgid "Acción no permitida"
 msgstr ""
 
+#: templates/403.html:8
+msgid "Lo sentimos, no tiene permisos para realizar esa operacion"
+msgstr ""
+
+#: templates/403.html:12
+msgid "inicie sesión</a> para realizar esa operación."
+msgstr ""
+
+#: templates/AcmeExplorer/actor/actor_form.html:5
+#: templates/AcmeExplorer/admin/admin_form.html:5
+#: templates/AcmeExplorer/category/category_form.html:3
+#: templates/AcmeExplorer/contact/contact_form.html:3
+#: templates/AcmeExplorer/curriculum/curriculum_detail.html:3
+#: templates/AcmeExplorer/explorer/explorer_form.html:3
+#: templates/AcmeExplorer/folder/folder_form.html:3
+#: templates/AcmeExplorer/legalText/legalText_form.html:3
+#: templates/AcmeExplorer/message/messageBroadcast_form.html:3
+#: templates/AcmeExplorer/message/message_form.html:3
+#: templates/AcmeExplorer/ranger/ranger_form.html:3
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_form.html:3
+msgid "Form"
+msgstr ""
+
 #: templates/AcmeExplorer/actor/actor_form.html:14
 #: templates/AcmeExplorer/admin/admin_form.html:14
+#: templates/AcmeExplorer/category/category_form.html:13
+#: templates/AcmeExplorer/contact/contact_form.html:13
+#: templates/AcmeExplorer/explorer/explorer_form.html:12
+#: templates/AcmeExplorer/folder/folder_form.html:13
+#: templates/AcmeExplorer/legalText/legalText_form.html:13
+#: templates/AcmeExplorer/message/messageBroadcast_form.html:9
+#: templates/AcmeExplorer/message/message_form.html:13
+#: templates/AcmeExplorer/ranger/ranger_form.html:12
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_form.html:14
 msgid "Save"
 msgstr ""
 
+#: templates/AcmeExplorer/category/category_detail.html:3
+#: templates/AcmeExplorer/contact/contact_detail.html:3
+#: templates/AcmeExplorer/folder/folder_detail.html:3
+#: templates/AcmeExplorer/legalText/legalText_detail.html:3
+#: templates/AcmeExplorer/message/message_detail.html:3
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:3
+msgid "Details"
+msgstr ""
+
 #: templates/AcmeExplorer/category/category_detail.html:8
+#: templates/AcmeExplorer/contact/contact_detail.html:9
+#: templates/AcmeExplorer/folder/folder_detail.html:10
+#: templates/AcmeExplorer/legalText/legalText_detail.html:11
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:12
 #: templates/header.html:38
 msgid "Edit"
 msgstr ""
 
 #: templates/AcmeExplorer/category/category_detail.html:11
+#: templates/AcmeExplorer/contact/contact_detail.html:12
+#: templates/AcmeExplorer/curriculum/curriculum_detail.html:9
+#: templates/AcmeExplorer/folder/folder_detail.html:11
+#: templates/AcmeExplorer/folder/folder_detail.html:14
+#: templates/AcmeExplorer/legalText/legalText_detail.html:14
+#: templates/AcmeExplorer/message/message_detail.html:15
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:15
 msgid "Delete"
+msgstr ""
+
+#: templates/AcmeExplorer/category/category_list.html:18
+#: templates/AcmeExplorer/contact/contact_list.html:18
+#: templates/AcmeExplorer/message/message_list.html:17
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_list.html:17
+#: templates/header.html:39 templates/header.html:40 templates/header.html:41
+#: templates/header.html:42 templates/header.html:44 templates/header.html:46
+#: templates/header.html:47 templates/header.html:56 templates/header.html:57
+#: templates/header.html:58 templates/header.html:59 templates/header.html:68
+#: templates/header.html:69 templates/header.html:70 templates/header.html:71
+#: templates/header.html:72 templates/header.html:81 templates/header.html:82
+#: templates/header.html:83 templates/header.html:92 templates/header.html:93
+msgid "Display"
+msgstr ""
+
+#: templates/AcmeExplorer/category/category_list.html:25
+#: templates/AcmeExplorer/contact/contact_list.html:26
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:35
+#: templates/AcmeExplorer/folder/folder_list.html:26
+#: templates/AcmeExplorer/legalText/legalText_list.html:28
+#: templates/header.html:29 templates/header.html:43 templates/header.html:45
+msgid "Create"
+msgstr ""
+
+#: templates/AcmeExplorer/category/category_list.html:25
+msgid "category"
+msgstr ""
+
+#: templates/AcmeExplorer/contact/contact_list.html:26
+msgid "contact"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_detail.html:6
+msgid "Ticker"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:10
+msgid "Personal record"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:11
+msgid "Educational record"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:12
+msgid "Professional record"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:13
+msgid "Endorser record"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:14
+msgid "Miscellaneous record"
+msgstr ""
+
+#: templates/AcmeExplorer/curriculum/curriculum_list.html:35
+msgid "curriculum"
+msgstr ""
+
+#: templates/AcmeExplorer/folder/folder_detail.html:6
+msgid "Name"
+msgstr ""
+
+#: templates/AcmeExplorer/folder/folder_detail.html:7
+msgid "System folder"
+msgstr ""
+
+#: templates/AcmeExplorer/folder/folder_detail.html:8
+msgid "Parent category"
+msgstr ""
+
+#: templates/AcmeExplorer/folder/folder_list.html:2
+#: templates/AcmeExplorer/legalText/legalText_list.html:2
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_list.html:2
+msgid "List"
+msgstr ""
+
+#: templates/AcmeExplorer/folder/folder_list.html:26 templates/header.html:29
+msgid "folder"
+msgstr ""
+
+#: templates/AcmeExplorer/legalText/legalText_detail.html:6
+msgid "Title"
+msgstr ""
+
+#: templates/AcmeExplorer/legalText/legalText_detail.html:7
+msgid "Body"
+msgstr ""
+
+#: templates/AcmeExplorer/legalText/legalText_detail.html:8
+msgid "Laws"
+msgstr ""
+
+#: templates/AcmeExplorer/legalText/legalText_detail.html:9
+msgid "Registration date"
+msgstr ""
+
+#: templates/AcmeExplorer/legalText/legalText_detail.html:10
+msgid "Draft mode"
+msgstr ""
+
+#: templates/AcmeExplorer/legalText/legalText_list.html:28
+msgid "legal text"
+msgstr ""
+
+#: templates/AcmeExplorer/message/message_detail.html:6
+msgid "Send date"
+msgstr ""
+
+#: templates/AcmeExplorer/message/message_detail.html:7
+msgid "Sender"
+msgstr ""
+
+#: templates/AcmeExplorer/message/message_detail.html:8
+msgid "Subject"
+msgstr ""
+
+#: templates/AcmeExplorer/message/message_detail.html:9
+msgid "Message body"
+msgstr ""
+
+#: templates/AcmeExplorer/message/message_detail.html:10
+msgid "Priority"
+msgstr ""
+
+#: templates/AcmeExplorer/message/message_detail.html:11
+msgid "Saved in"
+msgstr ""
+
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:7
+msgid "Nick"
+msgstr ""
+
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:8
+msgid "Social network name"
+msgstr ""
+
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:9
+msgid "Profile link"
+msgstr ""
+
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:10
+msgid "Photo"
+msgstr ""
+
+#: templates/AcmeExplorer/socialIdentities/socialIdentities_detail.html:11
+msgid "User"
+msgstr ""
+
+#: templates/header.html:10
+msgid "Profile"
 msgstr ""
 
 #: templates/header.html:13
@@ -42,6 +247,10 @@ msgstr ""
 
 #: templates/header.html:14
 msgid "Log out"
+msgstr ""
+
+#: templates/header.html:16
+msgid "Messages"
 msgstr ""
 
 #: templates/header.html:19
@@ -60,30 +269,12 @@ msgstr ""
 msgid "My folders"
 msgstr ""
 
-#: templates/header.html:29 templates/header.html:43 templates/header.html:45
-msgid "Create"
-msgstr ""
-
-#: templates/header.html:29
-msgid "folder"
-msgstr ""
-
 #: templates/header.html:35
 msgid "Administrator"
 msgstr ""
 
 #: templates/header.html:38
 msgid "system configuration"
-msgstr ""
-
-#: templates/header.html:39 templates/header.html:40 templates/header.html:41
-#: templates/header.html:42 templates/header.html:44 templates/header.html:46
-#: templates/header.html:47 templates/header.html:56 templates/header.html:57
-#: templates/header.html:58 templates/header.html:59 templates/header.html:68
-#: templates/header.html:69 templates/header.html:70 templates/header.html:71
-#: templates/header.html:72 templates/header.html:81 templates/header.html:82
-#: templates/header.html:83 templates/header.html:92 templates/header.html:93
-msgid "Display"
 msgstr ""
 
 #: templates/header.html:39
@@ -178,92 +369,12 @@ msgid ""
 "<p>Please login to see this page.</p>\n"
 msgstr ""
 
-#: templates/registration/login.html:76 views.py:72 views.py:89 views.py:107
+#: templates/registration/login.html:76
 msgid "username"
 msgstr ""
 
 #: templates/registration/login.html:82
 msgid "Password"
-msgstr ""
-
-#: views.py:72 views.py:89 views.py:107
-msgid "first_name"
-msgstr ""
-
-#: views.py:72 views.py:89 views.py:107
-msgid "last_name"
-msgstr ""
-
-#: views.py:72 views.py:89 views.py:107
-msgid "password"
-msgstr ""
-
-#: views.py:72 views.py:89 views.py:107
-msgid "email"
-msgstr ""
-
-#: views.py:72 views.py:89 views.py:107
-msgid "phoneNumber"
-msgstr ""
-
-#: views.py:72 views.py:89 views.py:107
-msgid "address"
-msgstr ""
-
-#: views.py:126 views.py:135
-msgid "title"
-msgstr ""
-
-#: views.py:126 views.py:135
-msgid "body"
-msgstr ""
-
-#: views.py:126 views.py:135
-msgid "applicableLaws"
-msgstr ""
-
-#: views.py:126 views.py:135
-msgid "draftMode"
-msgstr ""
-
-#: views.py:135
-msgid "id"
-msgstr ""
-
-#: views.py:174
-msgid "Legal Text"
-msgstr ""
-
-#: views.py:205
-msgid "nick"
-msgstr ""
-
-#: views.py:205
-msgid "socialNetworkName"
-msgstr ""
-
-#: views.py:205
-msgid "profileLink"
-msgstr ""
-
-#: views.py:205
-msgid "photo"
-msgstr ""
-
-#: views.py:263
-msgid "Social identity"
-msgstr ""
-
-#: views.py:374
-msgid "Folder"
-msgstr ""
-
-#: views.py:614 views.py:624
-msgid "name"
-msgstr ""
-
-#: views.py:614 views.py:624
-msgid "parentCategory"
 msgstr ""
 
 #~ msgid "¿Esta seguro?"

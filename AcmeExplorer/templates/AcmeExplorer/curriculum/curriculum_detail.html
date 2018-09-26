@@ -1,11 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Form' %}
 {% endblock %}
 {% block content %}
-<p>Ticker: {{object.ticker}}</p>
-<form action="{% url 'AcmeExplorer:curriculumDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<p>{% trans 'Ticker' %}: {{object.ticker}}</p>
+<form action="{% url 'AcmeExplorer:curriculumDelete' object.pk %}" method="post" onsubmit="return confirm(gettext('¿Esta seguro?'))">
 	{% csrf_token %}
-	<button type="submit">Borrar</button>
+	<button type="submit">{% trans 'Delete' %}</button>
 </form>
 {% endblock %}

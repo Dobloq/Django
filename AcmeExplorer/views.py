@@ -69,7 +69,7 @@ class Login(LoginView):
 
 class RangerCreate(CreateView):
     model = Ranger
-    fields = [_("first_name"), _("last_name"), _("username"), _("password"), _("email"), _("phoneNumber"), _("address")]
+    fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
     success_url = reverse_lazy('AcmeExplorer:home')
     template_name = "AcmeExplorer/ranger/ranger_form.html"
 
@@ -86,7 +86,7 @@ class RangerCreate(CreateView):
 
 class ExplorerCreate(CreateView):
     model = Explorer
-    fields = [_("first_name"), _("last_name"), _("username"), _("password"), _("email"), _("phoneNumber"), _("address")]
+    fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
     success_url = reverse_lazy('AcmeExplorer:home')
     template_name = "AcmeExplorer/explorer/explorer_form.html"
 
@@ -104,7 +104,7 @@ class ExplorerCreate(CreateView):
 class AdminCreate(CreateView):
     permission_required = 'ADMINISTRATOR'
     model = Administrator
-    fields = [_("first_name"), _("last_name"), _("username"), _("password"), _("email"), _("phoneNumber"), _("address")]
+    fields = ["first_name", "last_name", "username", "password", "email", "phoneNumber", "address"]
     success_url = reverse_lazy('AcmeExplorer:home')
     template_name = "AcmeExplorer/admin/admin_form.html"
 
@@ -123,7 +123,7 @@ class AdminCreate(CreateView):
 class LegalTextCreate(CreateView):
     permission_required = 'ADMINISTRATOR'
     model = LegalText
-    fields = [_('title'), _('body'), _('applicableLaws'), _('draftMode')]
+    fields = ['title', 'body', 'applicableLaws', 'draftMode']
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
     template_name = "AcmeExplorer/legalText/legalText_form.html"
 
@@ -132,7 +132,7 @@ class LegalTextCreate(CreateView):
 class LegalTextUpdate(UpdateView):
     permission_required = 'ADMINISTRATOR'
     model = LegalText
-    fields = [_('id'), _('title'), _('body'), _('applicableLaws'), _('draftMode')]
+    fields = ['id', 'title', 'body', 'applicableLaws', 'draftMode']
     template_name = "AcmeExplorer/legalText/legalText_form.html"
     success_url = reverse_lazy('AcmeExplorer:legalTextList')
 
@@ -171,7 +171,7 @@ class LegalTextList(ListView):
         lista = list(campos)
         lista.pop(0)
         context['fields'] = lista
-        context['modelo'] = _('Legal Text')
+        context['modelo'] = 'Legal Text'
         return context
 
 
@@ -202,7 +202,7 @@ def socialIdentitiesCreate(request):
 # # Funciona
 class SocialIdentitiesUpdate(UpdateView):
     model = SocialIdentities
-    fields = [_('nick'), _('socialNetworkName'), _('profileLink'), _('photo')]
+    fields = ['nick', 'socialNetworkName', 'profileLink', 'photo']
     template_name = "AcmeExplorer/socialIdentities/socialIdentities_form.html"
     success_url = reverse_lazy('AcmeExplorer:socialIdentitiesList')
 
@@ -260,7 +260,7 @@ class SocialIdentitiesList(ListView):
             pass
         context['object_list'] = object_list
         context['fields'] = lista
-        context['modelo'] = _('Social identity')
+        context['modelo'] = 'Social identity'
         return context
 
 
@@ -371,7 +371,7 @@ class FolderList(ListView):
             pass
         context['object_list'] = object_list
         context['fields'] = lista
-        context['modelo'] = _('Folder')
+        context['modelo'] = 'Folder'
         return context
 
 ########################################################## Message #####################################################
@@ -611,7 +611,7 @@ class ContactList(ListView):
 class CategoryCreate(CreateView):
     permission_required = 'ADMINISTRATOR'
     model = Category
-    fields = [_('name'), _('parentCategory')]
+    fields = ['name', 'parentCategory']
     success_url = reverse_lazy('AcmeExplorer:categoryList')
     template_name = "AcmeExplorer/category/category_form.html"
 
@@ -621,7 +621,7 @@ class CategoryCreate(CreateView):
 class CategoryUpdate(UpdateView):
     permission_required = 'ADMINISTRATOR'
     model = Category
-    fields = [_('name'), _('parentCategory')]
+    fields = ['name', 'parentCategory']
     template_name = "AcmeExplorer/category/category_form.html"
     success_url = reverse_lazy('AcmeExplorer:categoryList')
 

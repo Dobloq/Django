@@ -1,4 +1,6 @@
 {% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %} Listado {% endblock %} 
 {% block content %}
 <table class="displaytag">
@@ -15,7 +17,7 @@
 	{% else %}
 	<tr class="odd">
 	{% endif %}
-		<td><a href="{% url 'AcmeExplorer:contactDisplay' contact.id %}">Mostrar</a></td>
+		<td><a href="{% url 'AcmeExplorer:contactDisplay' contact.id %}">{% trans 'Display' %}</a></td>
 		<td>{{ contact.name }}</td>
 		<td>{{ contact.email }}</td>
 		<td>{{ contact.phoneNumber }}</td>
@@ -23,6 +25,6 @@
 	{% endfor %}
 </table>
 
-<a href="{% url 'AcmeExplorer:contactCreate' %}">Crear contacto</a>
+<a href="{% url 'AcmeExplorer:contactCreate' %}">{% trans 'Create' %} {% trans 'contact' %}</a>
 <br><br>
 {% endblock %}

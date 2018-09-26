@@ -5,6 +5,8 @@ Created on 16 abr. 2018
 '''
 from django import forms
 from .models import Folder, SocialIdentities, Message, Contact
+from django.utils.translation import gettext as _
+
 
 class Formulario(forms.Form):
     nombre = forms.CharField(label="Nombre", max_length=100)
@@ -21,28 +23,38 @@ class Formulario(forms.Form):
 #     registrationDate = models.DateField(auto_now_add=True)
 #     draftMode = models.BooleanField
 
+
 class FolderForm(forms.ModelForm):
+
     class Meta:
         model = Folder
         fields = ['name', 'systemFolder', 'parentFolder']
+
         
 class SocialIdentitiesForm(forms.ModelForm):
+
     class Meta:
         model = SocialIdentities
-        fields = ['nick','socialNetworkName','profileLink','photo']
+        fields = ['nick', 'socialNetworkName', 'profileLink', 'photo']
+
         
 # sentDate, subject, body, priority, senderUser, receiverUser, folder
 class MessageForm(forms.ModelForm):
+
     class Meta:
         model = Message
-        fields = ['subject','body','priority','receiverUser']
+        fields = ['subject', 'body', 'priority', 'receiverUser']
+
         
 class MessageBroadcastForm(forms.ModelForm):
+
     class Meta:
         model = Message
-        fields = ['subject','body','priority']
+        fields = ['subject', 'body', 'priority']
+
         
 class ContactForm(forms.ModelForm):
+
     class Meta:
         model = Contact
-        fields = ['name','email','phoneNumber']
+        fields = ['name', 'email', 'phoneNumber']

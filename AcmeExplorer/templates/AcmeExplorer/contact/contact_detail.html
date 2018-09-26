@@ -1,14 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Details' %}
 {% endblock %}
 {% block content %}
 <p>Nombre: {{object.name}}</p>
 <p>Email: {{object.email}}</p>
 <p>Numero de telefono: {{object.phoneNumber}}</p>
-<a href="{% url 'AcmeExplorer:contactUpdate' object.pk %}"><button type="button">Editar</button></a>
-<form action="{% url 'AcmeExplorer:contactDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<a href="{% url 'AcmeExplorer:contactUpdate' object.pk %}"><button type="button">{% trans 'Edit' %}</button></a>
+<form action="{% url 'AcmeExplorer:contactDelete' object.pk %}" method="post" onsubmit="return confirm(gettext('¿Esta seguro?'))">
 	{% csrf_token %}
-	<button type="submit">Borrar</button>
+	<button type="submit">{% trans 'Delete' %}</button>
 </form>
 {% endblock %}

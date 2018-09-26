@@ -1,5 +1,7 @@
 {% extends 'base.html' %} 
-{% block title %} Formulario {% endblock %} 
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'List' %} {% endblock %} 
 {% block content %}
 <table class="displaytag">
 	<thead>
@@ -14,7 +16,7 @@
 	{% else %}
 	<tr class="odd">
 	{% endif %}
-		<td><a href="{% url 'AcmeExplorer:socialIdentitiesDisplay' socialIdentities.id %}">Mostrar</a></td>
+		<td><a href="{% url 'AcmeExplorer:socialIdentitiesDisplay' socialIdentities.id %}">{% trans 'Display' %}</a></td>
 <!-- 		<td><a href="/AcmeExplorer/{{socialIdentities.user_id}}/{{socialIdentities.id}}">Mostrar</a></td> -->
 		<td>{{ socialIdentities.nick }}</td>
 		<td>{{ socialIdentities.socialNetworkName }}</td>

@@ -5,11 +5,11 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-Lo sentimos, no tiene permisos para realizar esa operacion
+{% trans 'Lo sentimos, no tiene permisos para realizar esa operacion' %}
 
 {% else %}
 
-Es necesario que se registre o <a href="{% url 'AcmeExplorer:login' %}">inicie sesión</a> para realizar esa operación.
+%{trans 'Es necesario que se registre o'%} <a href="{% url 'AcmeExplorer:login' %}">{% trans 'inicie sesión</a> para realizar esa operación.'%}
 
 {% endif %}
 {% endblock %}

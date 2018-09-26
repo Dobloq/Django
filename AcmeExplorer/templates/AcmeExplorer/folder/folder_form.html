@@ -1,6 +1,8 @@
 {% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Form' %}
 {% endblock %} 
 {% block content %}
 {% if pk is None %}
@@ -10,6 +12,6 @@ Formulario
 {% endif %}
 	{% csrf_token %}
 	{{ form }}
-	<button type="submit">Enviar</button>
+	<button type="submit">{% trans 'Save' %}</button>
 </form>
 {% endblock %}

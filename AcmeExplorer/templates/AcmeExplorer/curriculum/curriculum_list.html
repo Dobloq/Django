@@ -1,4 +1,6 @@
 {% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %} Listado {% endblock %} 
 {% block content %}
 <table class="displaytag">
@@ -7,11 +9,11 @@
 		<th class="sortable"></th>
 		{% for field in fields %}
 		<th class="sortable"><a>{{ field|capfirst }}</a></th> 
-		<th class="sortable"><a>Personal record</a></th> 
-		<th class="sortable"><a>Educational record</a></th> 
-		<th class="sortable"><a>Professional record</a></th> 
-		<th class="sortable"><a>Endorser record</a></th> 
-		<th class="sortable"><a>Miscellaneous record</a></th>
+		<th class="sortable"><a>{% trans 'Personal record' %}</a></th> 
+		<th class="sortable"><a>{% trans 'Educational record' %}</a></th> 
+		<th class="sortable"><a>{% trans 'Professional record' %}</a></th> 
+		<th class="sortable"><a>{% trans 'Endorser record' %}</a></th> 
+		<th class="sortable"><a>{% trans 'Miscellaneous record' %}</a></th>
 		{% endfor %}
 	</thead>
 	{% for curriculum in object_list %}
@@ -32,6 +34,6 @@
 	{% endfor %}
 </table>
 {% if perms.AcmeExplorer.RANGER %}
-<a href="{% url 'AcmeExplorer:curriculumCreate' %}">Crear curriculum</a>
+<a href="{% url 'AcmeExplorer:curriculumCreate' %}">{% trans 'Create' %} {% trans 'curriculum' %}</a>
 {% endif %}
 {% endblock %}

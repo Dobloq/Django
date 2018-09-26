@@ -1,16 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Details' %}
 {% endblock %}
 {% block content %}
-<p>Titulo: {{object.title}}</p>
-<p>Cuerpo: {{object.body}}</p>
-<p>Leyes aplicables: {{object.applicableLaws}}</p>
-<p>Fecha de redaccion: {{object.registrationDate}}</p>
-<p>Modo borrador: {{object.draftMode|yesno:"Si,No" }}</p>
-<a href="{% url 'AcmeExplorer:legalTextUpdate' object.pk %}"><button type="button">Editar</button></a>
-<form action="{% url 'AcmeExplorer:legalTextDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<p>{% trans 'Title' %}: {{object.title}}</p>
+<p>{% trans 'Body' %}: {{object.body}}</p>
+<p>{% trans 'Laws' %}: {{object.applicableLaws}}</p>
+<p>{% trans 'Registration date' %}: {{object.registrationDate}}</p>
+<p>{% trans 'Draft mode' %}: {{object.draftMode|yesno:"Si,No" }}</p>
+<a href="{% url 'AcmeExplorer:legalTextUpdate' object.pk %}"><button type="button">{% trans 'Edit' %}</button></a>
+<form action="{% url 'AcmeExplorer:legalTextDelete' object.pk %}" method="post" onsubmit="return confirm(gettext('¿Esta seguro?'))">
 	{% csrf_token %}
-	<button type="submit">Borrar</button>
+	<button type="submit">{% trans 'Delete' %}</button>
 </form>
 {% endblock %}

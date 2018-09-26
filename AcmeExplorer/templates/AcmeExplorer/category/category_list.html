@@ -1,4 +1,6 @@
 {% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %} Listado {% endblock %} 
 {% block content %}
 <table class="displaytag">
@@ -15,14 +17,14 @@
 	{% else %}
 	<tr class="odd">
 	{% endif %}
-		<td><a href="{% url 'AcmeExplorer:categoryDisplay' category.id %}">Mostrar</a></td>
+		<td><a href="{% url 'AcmeExplorer:categoryDisplay' category.id %}">{% trans 'Display' %}</a></td>
 		<td>{{ category.name }}</td>
 		<td>{{ category.parentCategory.name }}</td>
 	</tr>
 	{% endfor %}
 </table>
 {% if perms.AcmeExplorer.ADMINISTRATOR %}
-<a href="{% url 'AcmeExplorer:categoryCreate' %}">Crear categoria</a>
+<a href="{% url 'AcmeExplorer:categoryCreate' %}">{% trans 'Create' %} {% trans 'category' %}</a>
 {% endif %}
 <br><br>
 {% endblock %}

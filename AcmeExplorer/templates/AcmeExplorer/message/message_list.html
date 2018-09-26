@@ -1,4 +1,6 @@
 {% extends 'base.html' %} 
+{% load static %}
+{% load i18n %} 
 {% block title %} Lista {% endblock %} 
 {% block content %}
 <table class="displaytag">
@@ -14,7 +16,7 @@
 	{% else %}
 	<tr class="odd">
 	{% endif %}
-		<td><a href="{% url 'AcmeExplorer:messageDisplay' message.id %}">Mostrar</a></td>
+		<td><a href="{% url 'AcmeExplorer:messageDisplay' message.id %}">{% trans 'Display' %}</a></td>
 		<td>{{ message.sentDate }}</td>
 		<td>{{ message.subject }}</td>
 		<td>{{ message.priority }}</td>

@@ -7,13 +7,13 @@
 	<ul id="jMenu">
 		{% if request.user.is_authenticated %}
 		<!-- 		Si esta autentificado -->
-		<li><a class="fNiv">Perfil ({{request.user.first_name}})</a>
+		<li><a class="fNiv">{% trans 'Profile' %} ({{request.user.first_name}})</a>
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="{{rol}}/edit">{% trans 'Edit profile' %}</a></li>
 				<li><a href="/AcmeExplorer/logout">{% trans 'Log out' %}</a></li>
 			</ul></li>
-		<li><a class="fNiv">Mensajes</a>
+		<li><a class="fNiv">{% trans 'Messages' %}</a>
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="/AcmeExplorer/message/">{% trans 'My messages' %}</a></li>
@@ -35,15 +35,15 @@
 		<li><a class="fNiv">{% trans 'Administrator' %}</a>
 			<ul>
 				<li class="arrow"></li>
-				<li><a href="configurationSystem/admin/edit">{% trans 'Edit' %} {% trans 'system configuration' %}</a></li>
-				<li><a href="dashboard/admin/display">{% trans 'Display' %} {% trans 'dashboard'%}</a></li>
+				<li><a href="/AcmeExplorer/configurationSystem/admin/edit">{% trans 'Edit' %} {% trans 'system configuration' %}</a></li>
+				<li><a href="/AcmeExplorer/dashboard/admin/display">{% trans 'Display' %} {% trans 'dashboard'%}</a></li>
 				<li><a href="/AcmeExplorer/legalText/">{% trans 'Display' %} {% trans 'legal texts' %}</a></li>
-				<li><a href="tag/admin/list">{% trans 'Display' %} {% trans 'tags' %}</a></li>
-				<li><a href="ranger/admin/list">{% trans 'Display' %} {% trans 'rangers' %}</a></li>
-				<li><a href="ranger/admin/create">{% trans 'Create' %} {% trans 'ranger' %}</a></li>
-				<li><a href="manager/admin/list">{% trans 'Display' %} {% trans 'manager' %}</a></li>
-				<li><a href="manager/admin/create">{% trans 'Create' %} {% trans 'manager' %}</a></li>
-				<li><a href="trip/other/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
+				<li><a href="/AcmeExplorer/tag/admin/list">{% trans 'Display' %} {% trans 'tags' %}</a></li>
+				<li><a href="/AcmeExplorer/ranger/admin/list">{% trans 'Display' %} {% trans 'rangers' %}</a></li>
+				<li><a href="/AcmeExplorer/ranger/admin/create">{% trans 'Create' %} {% trans 'ranger' %}</a></li>
+				<li><a href="/AcmeExplorer/manager/admin/list">{% trans 'Display' %} {% trans 'manager' %}</a></li>
+				<li><a href="/AcmeExplorer/manager/admin/create">{% trans 'Create' %} {% trans 'manager' %}</a></li>
+				<li><a href="/AcmeExplorer/trip/other/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
 				<li><a href="/AcmeExplorer/category">{% trans 'Display' %} {% trans 'categories' %}</a></li>
 			</ul></li>
 		{% endif %}
@@ -54,9 +54,9 @@
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="/AcmeExplorer/category/">{% trans 'Display' %} {% trans 'categories' %}</a></li>
-				<li><a href="trip/manager/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
-				<li><a href="trip/manager/myTrips">{% trans 'Display' %} {% trans 'my' %} {% trans 'trips' %}</a></li>
-				<li><a href="application/manager/list">{% trans 'Display' %} {% trans 'applications' %}</a></li>
+				<li><a href="/AcmeExplorer/trip/manager/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
+				<li><a href="/AcmeExplorer/trip/manager/myTrips">{% trans 'Display' %} {% trans 'my' %} {% trans 'trips' %}</a></li>
+				<li><a href="/AcmeExplorer/application/manager/list">{% trans 'Display' %} {% trans 'applications' %}</a></li>
 			</ul></li>
 		{% endif %}
 
@@ -66,9 +66,9 @@
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="/AcmeExplorer/category">{% trans 'Display' %} {% trans 'categories' %}</a></li>
-				<li><a href="trip/explorer/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
-				<li><a href="trip/explorer/myTrips">{% trans 'Display' %} {% trans 'my' %} {% trans 'trips' %}</a></li>
-				<li><a href="application/explorer/list">{% trans 'Display' %} {% trans 'applications' %}</a></li>
+				<li><a href="/AcmeExplorer/trip/explorer/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
+				<li><a href="/AcmeExplorer/trip/explorer/myTrips">{% trans 'Display' %} {% trans 'my' %} {% trans 'trips' %}</a></li>
+				<li><a href="/AcmeExplorer/application/explorer/list">{% trans 'Display' %} {% trans 'applications' %}</a></li>
 				<li><a href="/AcmeExplorer/contact">{% trans 'Display' %} {% trans 'my' %} {% trans 'contacts' %}</a></li>
 			</ul></li>
 		{% endif %}
@@ -79,7 +79,7 @@
 			<ul>
 				<li class="arrow"></li>
 				<li><a href="/AcmeExplorer/category">{% trans 'Display' %} {% trans 'categories' %}</a></li>
-				<li><a href="trip/other/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
+				<li><a href="/AcmeExplorer/trip/other/list">{% trans 'Display' %} {% trans 'trips' %}</a></li>
 				<li><a href="/AcmeExplorer/curriculum">{% trans 'Display' %} {% trans 'my' %} curriculums</a></li>
 			</ul></li>
 		{% endif %}
@@ -89,7 +89,7 @@
 		<li><a class="fNiv" href="/AcmeExplorer/login">{% trans 'Log in' %}</a>
 		<li><a class="fNiv" href="/AcmeExplorer/ranger/create">{% trans 'Register as ranger' %}</a>
 		<li><a class="fNiv" href="/AcmeExplorer/explorer/create">{% trans 'Register as explorer' %}</a>
-		<li><a class="fNiv" href="trip/other/list">{% trans 'Display' %} {% trans 'trips' %}</a>
+		<li><a class="fNiv" href="/AcmeExplorer/trip/other/list">{% trans 'Display' %} {% trans 'trips' %}</a>
 		<li><a class="fNiv" href="/AcmeExplorer/category">{% trans 'Display' %} {% trans 'categories' %}</a>
 		{% endif %}
 	</ul>

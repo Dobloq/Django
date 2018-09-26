@@ -1,16 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Details' %}
 {% endblock %}
 {% block content %}
-<p>Nombre: {{object.name}}</p>
-<p>Carpeta del sistema: {{object.systemFolder|yesno:"Si,No"}}</p>
-<p>Carpeta padre: {% if object.parentFolder %}<a href="{% url 'AcmeExplorer:folderDisplay' object.parentFolder.id%}">{{object.parentFolder.name}}</a></p>{% endif %}
+<p>{% trans 'Name' %}: {{object.name}}</p>
+<p>{% trans 'System folder' %}: {{object.systemFolder|yesno:"Si,No"}}</p>
+<p>{% trans 'Parent category' %}: {% if object.parentFolder %}<a href="{% url 'AcmeExplorer:folderDisplay' object.parentFolder.id%}">{{object.parentFolder.name}}</a></p>{% endif %}
 <br>
-<a href="{% url 'AcmeExplorer:folderUpdate' object.pk %}"><button type="button">Editar</button></a>
-<a href="{% url 'AcmeExplorer:folderDelete' object.pk %}"><button type="button" onclick="return confirm('¿Esta seguro?')">Borrar</button></a>
-<form action="{% url 'AcmeExplorer:folderDelete' object.pk %}" method="post" onsubmit="return confirm('¿Esta seguro?')">
+<a href="{% url 'AcmeExplorer:folderUpdate' object.pk %}"><button type="button">{% trans 'Edit' %}</button></a>
+<a href="{% url 'AcmeExplorer:folderDelete' object.pk %}"><button type="button" onclick="return confirm(gettext('¿Esta seguro?'))">{% trans 'Delete' %}</button></a>
+<form action="{% url 'AcmeExplorer:folderDelete' object.pk %}" method="post" onsubmit="return confirm(gettext('¿Esta seguro?'))">
 	{% csrf_token %}
-	<button type="submit">Borrar</button>
+	<button type="submit">{% trans 'Delete' %}</button>
 </form>
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends 'base.html' %} 
-{% block title %} Formulario {% endblock %} 
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans 'List' %} {% endblock %} 
 {% block content %}
 <table class="displaytag">
 	<thead>
@@ -23,6 +25,6 @@
 	{% endfor %}
 </table>
 
-<a href="{% url 'AcmeExplorer:folderCreate' %}">Crear carpeta</a>
+<a href="{% url 'AcmeExplorer:folderCreate' %}">{% trans 'Create' %} {% trans 'folder' %}</a>
 <br><br>
 {% endblock %}

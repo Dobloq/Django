@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %}
+{% load i18n %}
 {% block title %}
-Formulario
+{% trans 'Details' %}
 {% endblock %}
 {% block content %}
 <p>Nombre: {{object.name}}</p>
