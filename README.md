@@ -1,5 +1,5 @@
 # Django
-Versión del proyecto "AcmeExplorer" de la asignatura Diseño y Pruebas, de Ingeniería del Software, hecha en Django
+Versión del proyecto "AcmeExplorer" de la asignatura Diseño y Pruebas, de Ingeniería del Software, hecha en Django.
 Para usar el proyecto es necesario Django y Python(se recomienda Python 3.6 ya que uno de los paquetes necesarios requiere esta version).
 
 Para instalar Django en la consola hay que escribir(teniendo Python y la herramienta pip instalados):
